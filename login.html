@@ -28,7 +28,7 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-analytics.js";
-    import { getAuth, googleAuthProvider, SignInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
   
     const firebaseConfig = {
       apiKey: "AIzaSyBbyFCzFnlQfu1uji9nJjSjMWYcVIqpagE",
@@ -41,7 +41,7 @@
     };
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
-    const auth =getAuth(app)
+    const auth =getAuth(app);
     const provider = new GoogleAuthProvider();
     provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     auth.useDeviceLanguage();
@@ -60,11 +60,11 @@
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const user = result.user;
       console.log(user);
-      window.locaton.herf= "";
+      window.locaton.herf= "../Text-submmission.html";
     }).catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-  });
+      const errorCode = error.code;
+      const errorMessage = error.message;
+    });
     });
     document.getElementById('github-login').addEventListener('click', () => {
       // Handle GitHub login
