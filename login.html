@@ -44,7 +44,6 @@
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
-    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
     auth.useDeviceLanguage();
 
     // Handle login with email and password
