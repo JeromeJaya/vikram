@@ -43,6 +43,8 @@
     const analytics = getAnalytics(app);
     const auth =getAuth(app)
     const provider = new GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    auth.useDeviceLanguage();
     // Firebase login handling
     const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', (e) => {
@@ -51,7 +53,8 @@
     });
 
     document.getElementById('google-login').addEventListener('click', () => {
-      // Handle Google loginsignInWithPopup(auth, provider)
+      // Handle Google login
+    signInWithPopup(auth, provider)
   .then((result) => {
     const credential = GoogleAuthProvider.credentialFromResult(result);
     const token = credential.accessToken;
