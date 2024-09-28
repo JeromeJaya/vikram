@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Our Service</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <div class="logo">Our Service</div>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro-section">
+      <h1>Discover Our Amazing Service</h1>
+      <p>Get access to exclusive features by signing up and getting approved by our admin.</p>
+      <button id="get-started-btn">Get Started</button>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById('get-started-btn').addEventListener('click', () => {
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
+<style>
+  /* Base styles */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f2f5;
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2c3e50;
+  padding: 20px;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  animation: slide-down 1s ease-in-out;
+}
+
+.header .logo {
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  animation: glow 2s infinite alternate;
+}
+
+.header nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+}
+
+.header nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.2rem;
+  position: relative;
+}
+
+.header nav ul li a::after {
+  content: '';
+  width: 0;
+  height: 3px;
+  background-color: #3498db;
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  transition: 0.4s;
+}
+
+.header nav ul li a:hover::after {
+  width: 100%;
+}
+
+.intro-section {
+  text-align: center;
+  margin: 50px auto;
+  max-width: 900px;
+  animation: fade-in 1.5s ease;
+}
+
+.intro-section h1 {
+  font-size: 3.5rem;
+  color: #2c3e50;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.intro-section p {
+  font-size: 1.4rem;
+  color: #7f8c8d;
+  line-height: 1.8;
+  margin-bottom: 40px;
+}
+
+button#get-started-btn {
+  padding: 15px 50px;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 50px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transition: transform 0.5s ease, background-color 0.3s ease;
+}
+
+button#get-started-btn:hover {
+  transform: translateY(-10px);
+  background-color: #2980b9;
+}
+
+/* Animations */
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0% {
+    text-shadow: 0 0 10px #3498db, 0 0 20px #2980b9, 0 0 30px #3498db;
+  }
+  100% {
+    text-shadow: 0 0 20px #e74c3c, 0 0 30px #c0392b, 0 0 40px #e74c3c;
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+</style>
