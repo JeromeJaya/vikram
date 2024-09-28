@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request Permission</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="request-container">
+    <h2>Request Permission to Create Account</h2>
+    <form id="request-form">
+      <input type="text" id="name" placeholder="Your Name" required>
+      <input type="email" id="email" placeholder="Your Email" required>
+      <input type="text" id="problem-title" placeholder="Problem Title" required>
+      <textarea id="problem-desc" placeholder="Describe your problem"></textarea>
+      <button type="submit">Request Permission</button>
+    </form>
+  </div>
+
+  <script src="firebase.js"></script>
+  <script>
+    // Handle permission request submission to Firebase
+    document.getElementById('request-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Handle permission request
+    });
+  </script>
+</body>
+</html>
+<style>
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(135deg, #8e44ad, #3498db);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.request-container {
+  background-color: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+  text-align: center;
+  animation: fade-up 1s ease-in-out;
+}
+
+.request-container h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #8e44ad;
+}
+
+.request-container input, .request-container textarea {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: 2px solid #bdc3c7;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  transition: border 0.3s ease;
+}
+
+.request-container input:focus, .request-container textarea:focus {
+  border: 2px solid #8e44ad;
+}
+
+.request-container button {
+  padding: 15px;
+  background-color: #8e44ad;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.request-container button:hover {
+  background-color: #9b59b6;
+  transform: translateY(-5px);
+}
+
+@keyframes fade-up {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  
+</style>
