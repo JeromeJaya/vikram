@@ -33,8 +33,17 @@
     });
 
     document.getElementById('google-login').addEventListener('click', () => {
-      // Handle Google login
-      alert(jerome the button is working)
+      // Handle Google loginsignInWithPopup(auth, provider)
+  .then((result) => {
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    const user = result.user;
+  }).catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    const email = error.customData.email;
+    const credential = GoogleAuthProvider.credentialFromError(error);
+  });
     });
     document.getElementById('github-login').addEventListener('click', () => {
       // Handle GitHub login
