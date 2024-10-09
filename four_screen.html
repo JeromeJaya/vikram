@@ -56,9 +56,16 @@
         .minimized {
             width: 50% !important;
             height: 33.3% !important;
-            float: right;
+            position: relative;
+            right: -50%;
+            top: 0;
             z-index: 1;
         }
+
+        .minimized.top_left { top: 0 !important; }
+        .minimized.top_right { top: 33.3% !important; }
+        .minimized.bottom_left { top: 66.6% !important; }
+        .minimized.bottom_right { top: 100% !important; }
 
         .on_off {
             position: absolute;
@@ -223,15 +230,26 @@
                     currentFullScreen.classList.add('minimized');
                 }
                 screen.classList.add('fullscreen');
-                allScreens.forEach(s => {
-                    if (!s.classList.contains('fullscreen')) {
-                        s.classList.add('minimized');
-                    }
-                });
+                updateMinimizedScreens(screenClass);
                 currentFullScreen = screen;
             }
 
             screen.classList.toggle('on');
+        }
+
+        function updateMinimizedScreens(excludeScreenClass) {
+            const allScreens = document.querySelectorAll('.screen');
+            let top = 0;
+
+            allScreens.forEach(screen => {
+                if (!screen.classList.contains('fullscreen') && !screen.classList.contains(excludeScreenClass)) {
+                    screen.classList.add('minimized');
+                    screen.style.top = `${top * 33.3}%`;
+                    top++;
+                } else {
+                    screen.classList.remove('minimized');
+                }
+            });
         }
 
         function resetScreens() {
@@ -239,6 +257,7 @@
             allScreens.forEach(screen => {
                 screen.classList.remove('fullscreen');
                 screen.classList.remove('minimized');
+                screen.style.top = '';
             });
         }
 
