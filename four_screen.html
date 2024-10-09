@@ -292,7 +292,12 @@
                 }
                 screen.classList.add('fullscreen');
                 document.querySelectorAll('.screen').forEach(s => {
-                    if (s !== screen) s.style.display = 'block';
+                    if (s !== screen) {
+                        s.style.display = 'block';
+                        s.style.height  = '33.4%';
+                        s.style.position = 'relative';
+                        s.style.float = 'right';
+                            }
                 });
                 currentFullScreen = screen;
             }
