@@ -1,4 +1,3 @@
-/*<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -32,7 +31,6 @@
             overflow: hidden;
             background-color: white;
             border-color: grey;
-            float:none;
         }
 
         .screen.init {
@@ -55,6 +53,7 @@
             bottom: 0 !important;
             z-index: 10;
         }
+
         .on_off {
             position: absolute;
             top: 10px;
@@ -259,7 +258,7 @@
     </div>
 
     <script>
-     /*   let currentFullScreen = null;
+        let currentFullScreen = null;
 
         // Animate screens to their final position after 2 seconds
         window.onload = () => {
@@ -272,7 +271,7 @@
         };
 
         function toggleScreen(screenClass) {
-            const screen = document.querySelector(`.${screenClass}`);
+            const screen = document.querySelector(.${screenClass});
             const isFullScreen = screen.classList.contains('fullscreen');
 
             if (isFullScreen) {
@@ -307,66 +306,7 @@
         function submitText() {
             const text = document.querySelector('.top_left textarea').value;
             console.log('Submitted Text:', text);
-        }*/
-        ----------------------------------------------------------------------
-            let currentFullScreen = null;  // Tracks the current fullscreen screen
-
-function toggleScreen(screenClass) {
-    const screen = document.querySelector(`.${screenClass}`);
-    const isFullScreen = screen.classList.contains('fullscreen');
-
-    if (isFullScreen) {
-        // Minimize all screens back to their original sizes and positions
-        resetScreens();
-    } else {
-        // If there's already a maximized screen, minimize it
-        if (currentFullScreen) {
-            minimizeScreen(currentFullScreen);
         }
-
-        // Maximize the clicked screen and minimize the rest
-        maximizeScreen(screen);
-        currentFullScreen = screen;  // Track the currently maximized screen
-    }
-
-    screen.classList.toggle('on');
-}
-
-function resetScreens() {
-    // Reset all screens to original sizes and positions
-    document.querySelectorAll('.screen').forEach(screen => {
-        screen.classList.remove('fullscreen');
-        screen.style.width = '50%';
-        screen.style.height = '50%';
-        screen.style.float = 'none'; // Reset alignment
-        screen.classList.remove('no-transition');
-        screen.style.display = 'block';
-    });
-    currentFullScreen = null;  // No screen is maximized anymore
-}
-
-function maximizeScreen(screen) {
-    // Maximize the clicked screen
-    screen.classList.add('fullscreen');
-    screen.style.width = '50%';   // Maximize to half width
-    screen.style.height = '100%'; // Full height
-
-    // Minimize all other screens and arrange them on the left
-    document.querySelectorAll('.screen').forEach(s => {
-        if (s !== screen) {
-            minimizeScreen(s);
-        }
-    });
-}
-
-function minimizeScreen(screen) {
-    // Minimize the screen to 1/3 height and align it on the left
-    screen.style.width = '50%';
-    screen.style.height = '33.3%';
-    screen.style.float = 'left';
-    screen.style.display = 'block';
-}
-
     </script>
 </body>
 </html>
