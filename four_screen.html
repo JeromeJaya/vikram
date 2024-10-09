@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Screen Layout with Maximization</title>
+    <title>Four Screen Transition</title>
     <style>
         * {
             margin: 0;
@@ -24,39 +24,42 @@
             position: absolute;
             width: 50%;
             height: 50%;
-            border: 4px solid;
+            border: 4px solid grey;
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 1s ease;
-            overflow: hidden;
+            transition: all 1.5s ease;
             background-color: white;
-            border-color: grey;
+            overflow: hidden;
         }
 
-        .screen.top_left { top: 0; left: 0; }
-        .screen.top_right { top: 0; right: 0; }
-        .screen.bottom_left { bottom: 0; left: 0; }
-        .screen.bottom_right { bottom: 0; right: 0; }
+        /* Initial positions */
+        .top_left { top: 0; left: 0; }
+        .top_right { top: 0; right: 0; }
+        .bottom_left { bottom: 0; left: 0; }
+        .bottom_right { bottom: 0; right: 0; }
 
+        /* Fullscreen */
         .fullscreen {
             width: 100% !important;
             height: 100% !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
             z-index: 10;
         }
 
+        /* Minimized screens when one screen is maximized */
         .minimized {
-            width: 33.3% !important;
+            width: 50% !important;
             height: 33.3% !important;
             position: absolute;
             right: 0;
-            transition: all 1s ease;
         }
 
+        .minimized.top_left { top: 0; }
+        .minimized.top_right { top: 33.3%; }
+        .minimized.bottom_left { top: 66.6%; }
+        .minimized.bottom_right { display: none; } /* Hide bottom right when full screen */
+
+        /* Toggle button style */
         .on_off {
             position: absolute;
             top: 10px;
@@ -91,66 +94,147 @@
             background-color: green;
         }
 
+        /* Input container for the first screen */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 90%;
+        }
+
+        textarea {
+            width: 100%;
+            height: 250px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        button {
+            margin-top: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: grey;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2575fc;
+        }
+
+        .zoom-button {
+            padding: 10px 20px;
+            background-color: gray;
+            color: white;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
     </style>
 </head>
 <body>
-
+    <!-- Top left screen with input -->
     <div class="screen top_left">
         <div class="on_off" onclick="toggleScreen('top_left')">
             <div class="round"></div>
         </div>
-        <div>Top Left</div>
+        <div class="input-container">
+            <textarea placeholder="Enter your text here..."></textarea>
+            <button type="button" onclick="submitText()">Submit</button>
+        </div>
     </div>
 
+    <!-- Top right screen -->
     <div class="screen top_right">
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div>Top Right</div>
+        <div class="screen_text"></div>
     </div>
 
+    <!-- Bottom left screen with memory block -->
     <div class="screen bottom_left">
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
         </div>
-        <div>Bottom Left</div>
+        <div class="memory-container">
+            <div class="blocks-container">
+                <div class="block raw-memory">
+                    <p>Raw Memory</p>
+                </div>
+                <div class="block code-memory">
+                    <div class="memory-section yellow">Code Shared to Development Team</div>
+                    <div class="memory-section red">Tested Code with Bugs</div>
+                    <div class="memory-section green">Code Clear, No Bugs</div>
+                    <div class="memory-section gray">Raw Code</div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <!-- Bottom right screen -->
     <div class="screen bottom_right">
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
-        <div>Bottom Right</div>
+        <div class="screen_text"></div>
     </div>
 
     <script>
         let currentFullScreen = null;
 
+        // Function to maximize or minimize screens
         function toggleScreen(screenClass) {
             const screen = document.querySelector(`.${screenClass}`);
+            const isFullScreen = screen.classList.contains('fullscreen');
             const allScreens = document.querySelectorAll('.screen');
 
-            if (screen.classList.contains('fullscreen')) {
+            // Reset screens if already maximized
+            if (isFullScreen) {
                 resetScreens();
+                currentFullScreen = null;
             } else {
+                allScreens.forEach(s => s.classList.remove('fullscreen', 'minimized'));
+                currentFullScreen = screenClass;
+
+                // Maximize the selected screen
+                screen.classList.add('fullscreen');
+
+                // Minimize others
                 allScreens.forEach(s => {
                     if (!s.classList.contains(screenClass)) {
                         s.classList.add('minimized');
                     }
                 });
-                screen.classList.add('fullscreen');
-                currentFullScreen = screenClass;
             }
         }
 
+        // Reset layout to original state
         function resetScreens() {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('fullscreen', 'minimized');
-            });
-            currentFullScreen = null;
+            const allScreens = document.querySelectorAll('.screen');
+            allScreens.forEach(s => s.classList.remove('fullscreen', 'minimized'));
+        }
+
+        function submitText() {
+            alert('Text Submitted');
         }
 
     </script>
-
 </body>
 </html>
