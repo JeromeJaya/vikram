@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Screen Transition with Memory Block</title>
+    <title>Four Screen Layout with Maximization</title>
     <style>
         * {
             margin: 0;
@@ -28,44 +28,34 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 1.5s ease;
+            transition: all 1s ease;
             overflow: hidden;
             background-color: white;
             border-color: grey;
         }
 
-        .screen.init {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .screen.final.top_left { top: 0; left: 0; }
-        .screen.final.top_right { top: 0; right: 0; }
-        .screen.final.bottom_left { bottom: 0; left: 0; }
-        .screen.final.bottom_right { bottom: 0; right: 0; }
+        .screen.top_left { top: 0; left: 0; }
+        .screen.top_right { top: 0; right: 0; }
+        .screen.bottom_left { bottom: 0; left: 0; }
+        .screen.bottom_right { bottom: 0; right: 0; }
 
         .fullscreen {
-            width: 50% !important;
+            width: 100% !important;
             height: 100% !important;
             top: 0 !important;
             left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
             z-index: 10;
         }
 
         .minimized {
-            width: 50% !important;
+            width: 33.3% !important;
             height: 33.3% !important;
-            position: relative;
-            right: -50%;
-            top: 0;
-            z-index: 1;
+            position: absolute;
+            right: 0;
+            transition: all 1s ease;
         }
-
-        .minimized.top_left { top: 0 !important; }
-        .minimized.top_right { top: 33.3% !important; }
-        .minimized.bottom_left { top: 66.6% !important; }
-        .minimized.bottom_right { top: 100% !important; }
 
         .on_off {
             position: absolute;
@@ -101,170 +91,66 @@
             background-color: green;
         }
 
-        /* Input container for the first screen */
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            width: 90%;
-        }
-
-        textarea {
-            width: 100%;
-            height: 250px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        textarea:focus {
-            border-color: #6a11cb;
-            outline: none;
-        }
-
-        button {
-            margin-top: 5px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: grey;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #2575fc;
-        }
-
-        .zoom-button {
-            padding: 10px 20px;
-            background-color: gray;
-            color: white;
-            border: none;
-            cursor: pointer;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
     </style>
 </head>
 <body>
-    <!-- Top left screen with input -->
-    <div class="screen top_left init">
+
+    <div class="screen top_left">
         <div class="on_off" onclick="toggleScreen('top_left')">
             <div class="round"></div>
         </div>
-        <div class="input-container">
-            <textarea placeholder="Enter your text here..."></textarea>
-            <button type="button" onclick="submitText()">Submit</button>
-        </div>
+        <div>Top Left</div>
     </div>
 
-    <!-- Top right screen -->
-    <div class="screen top_right init">
+    <div class="screen top_right">
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div class="screen_text"></div>
+        <div>Top Right</div>
     </div>
 
-    <!-- Bottom left screen with memory block -->
-    <div class="screen bottom_left init">
+    <div class="screen bottom_left">
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
         </div>
-        <div class="memory-container">
-            <div class="blocks-container">
-                <div class="block raw-memory">
-                    <p>Raw Memory</p>
-                </div>
-                <div class="block code-memory">
-                    <div class="memory-section yellow">Code Shared to Development Team</div>
-                    <div class="memory-section red">Tested Code with Bugs</div>
-                    <div class="memory-section green">Code Clear, No Bugs</div>
-                    <div class="memory-section gray">Raw Code</div>
-                </div>
-            </div>
-        </div>
+        <div>Bottom Left</div>
     </div>
 
-    <!-- Bottom right screen -->
-    <div class="screen bottom_right init">
+    <div class="screen bottom_right">
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
-        <div class="screen_text"></div>
+        <div>Bottom Right</div>
     </div>
 
     <script>
         let currentFullScreen = null;
 
-        // Animate screens to their final position after 2 seconds
-        window.onload = () => {
-            setTimeout(() => {
-                document.querySelectorAll('.screen').forEach(screen => {
-                    screen.classList.remove('init');
-                    screen.classList.add('final');
-                });
-            }, 2000);
-        };
-
         function toggleScreen(screenClass) {
             const screen = document.querySelector(`.${screenClass}`);
-            const isFullScreen = screen.classList.contains('fullscreen');
             const allScreens = document.querySelectorAll('.screen');
 
-            if (isFullScreen) {
+            if (screen.classList.contains('fullscreen')) {
                 resetScreens();
-                currentFullScreen = null;
             } else {
-                if (currentFullScreen) {
-                    currentFullScreen.classList.remove('fullscreen');
-                    currentFullScreen.classList.add('minimized');
-                }
+                allScreens.forEach(s => {
+                    if (!s.classList.contains(screenClass)) {
+                        s.classList.add('minimized');
+                    }
+                });
                 screen.classList.add('fullscreen');
-                updateMinimizedScreens(screenClass);
-                currentFullScreen = screen;
+                currentFullScreen = screenClass;
             }
-
-            screen.classList.toggle('on');
-        }
-
-        function updateMinimizedScreens(excludeScreenClass) {
-            const allScreens = document.querySelectorAll('.screen');
-            let top = 0;
-
-            allScreens.forEach(screen => {
-                if (!screen.classList.contains('fullscreen') && !screen.classList.contains(excludeScreenClass)) {
-                    screen.classList.add('minimized');
-                    screen.style.top = `${top * 33.3}%`;
-                    top++;
-                } else {
-                    screen.classList.remove('minimized');
-                }
-            });
         }
 
         function resetScreens() {
-            const allScreens = document.querySelectorAll('.screen');
-            allScreens.forEach(screen => {
-                screen.classList.remove('fullscreen');
-                screen.classList.remove('minimized');
-                screen.style.top = '';
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('fullscreen', 'minimized');
             });
+            currentFullScreen = null;
         }
 
-        function submitText() {
-            const text = document.querySelector('.top_left textarea').value;
-            console.log('Submitted Text:', text);
-        }
     </script>
+
 </body>
 </html>
