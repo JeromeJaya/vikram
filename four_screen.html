@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Screen Transition</title>
+    <title>Four Screen Transition with Memory Block</title>
     <style>
         * {
             margin: 0;
@@ -20,44 +20,31 @@
             background-color: grey;
         }
 
-        .top_two, .bottom_two {
-            width: 100%;
-            display: flex;
-        }
-
         .screen {
             position: absolute;
             width: 50%;
             height: 50%;
             border: 4px solid;
-            border-radius: 0px;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 1.5s ease;
-            /*box-shadow: inset 0 0 0px grey;*/
-            overflow: hidden; /* Ensures no content overflows */
-        }
-
-        .top_right, .top_left, .bottom_left, .bottom_right {
+            overflow: hidden;
             background-color: white;
             border-color: grey;
         }
 
-        /* Start position in the center */
         .screen.init {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
 
-        /* Final positions in corners */
         .screen.final.top_left { top: 0; left: 0; }
         .screen.final.top_right { top: 0; right: 0; }
         .screen.final.bottom_left { bottom: 0; left: 0; }
         .screen.final.bottom_right { bottom: 0; right: 0; }
 
-        /* Full screen transition */
         .fullscreen {
             width: 50% !important;
             height: 100% !important;
@@ -102,99 +89,173 @@
             background-color: green;
         }
 
+        /* Input container for the first screen */
         .input-container {
-    display: flex;
-    flex-direction: column;/* Aligns items in a column */
-    justify-content: center; /* Centers the items */
-    align-items: center; /* Centers the items */
-    padding: 10px; /* Space around the input */
-    width: 90%; /* Set width to a smaller percentage to fit in the screens */
-}
-
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 90%;
+        }
 
         textarea {
-            width: 100%; /* Full width */
-            height: 250px; /* Fixed height */
-            border-radius: 5px; /* Rounded corners */
-            border: 1px solid #ccc; /* Border color */
-            padding: 10px; /* Padding inside */
-            margin-right: 8px;
-            resize: none; /* Disable resizing */
-            font-size: 16px; /* Font size */
-            transition: border-color 0.3s; /* Transition for border color */
+            width: 100%;
+            height: 250px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
         }
 
         textarea:focus {
-            border-color: #6a11cb; /* Change border color on focus */
-            outline: none; /* Remove default outline */
+            border-color: #6a11cb;
+            outline: none;
         }
 
         button {
-            margin-top: 5px; /* Space above button */
-            padding: 10px; /* Button padding */
-            border: none; /* No border */
-            border-radius: 5px; /* Rounded corners */
-            background-color: grey; /* Button background */
-            color: white; /* Text color */
-            font-size: 16px; /* Font size */
-            cursor: pointer; /* Pointer cursor */
-            transition: background-color 0.3s; /* Transition for background color */
-            box-shadow: grey;
+            margin-top: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: grey;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
         button:hover {
-            background-color: #2575fc; /* Change background color on hover */
-        }
-        .
-
-        /* Media Queries for responsiveness */
-        @media (max-width: 600px) {
-            .input-container {
-                margin-top: 10px; /* Reduce space for smaller screens */
-            }
-            button {
-                padding: 8px; /* Smaller padding */
-                font-size: 14px; /* Smaller font size */
-            }
-            textarea {
-                font-size: 14px; /* Smaller font size */
-            }
+            background-color: #2575fc;
         }
 
+        /* Memory block styles (from memory.html) */
+        .memory-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .blocks-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .block {
+            width: 200px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+        }
+
+        .raw-memory {
+            background-color: gray;
+        }
+
+        .code-memory {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .memory-section {
+            height: 75px;
+            width: 100%;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .yellow {
+            background-color: yellow;
+            color: black;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .gray {
+            background-color: gray;
+        }
+
+        .zoom-button {
+            padding: 10px 20px;
+            background-color: gray;
+            color: white;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .zoom-on {
+            transform: scale(1.5);
+        }
+
+        /* Disable transition during zoom */
         .no-transition {
-            transition: none !important; /* Disable transition */
+            transition: none !important;
         }
     </style>
 </head>
 <body>
+    <!-- Top left screen with input -->
     <div class="screen top_left init">
         <div class="on_off" onclick="toggleScreen('top_left')">
             <div class="round"></div>
         </div>
         <div class="input-container">
-
-         <textarea placeholder="Enter your text here..."></textarea>
-
-         <button type="button" onclick="submitText()">Submit</button>
-</div>
+            <textarea placeholder="Enter your text here..."></textarea>
+            <button type="button" onclick="submitText()">Submit</button>
         </div>
+    </div>
+
+    <!-- Top right screen -->
     <div class="screen top_right init">
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div class= "screen_text"></div>
+        <div class="screen_text"></div>
     </div>
+
+    <!-- Bottom left screen with memory block -->
     <div class="screen bottom_left init">
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
         </div>
-        <div class= "screen_text"></div>
+        <div class="memory-container">
+            <div class="blocks-container">
+                <div class="block raw-memory">
+                    <p>Raw Memory</p>
+                </div>
+                <div class="block code-memory">
+                    <div class="memory-section yellow">Code Shared to Development Team</div>
+                    <div class="memory-section red">Tested Code with Bugs</div>
+                    <div class="memory-section green">Code Clear, No Bugs</div>
+                    <div class="memory-section gray">Raw Code</div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Bottom right screen -->
     <div class="screen bottom_right init">
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
-        <div class= "screen_text"></div>
+        <div class="screen_text"></div>
     </div>
 
     <script>
@@ -215,23 +276,19 @@
             const isFullScreen = screen.classList.contains('fullscreen');
 
             if (isFullScreen) {
-                // Minimize: Go back to original position
                 screen.classList.remove('fullscreen');
-                screen.classList.add('no-transition'); // Disable transition during minimize
+                screen.classList.add('no-transition');
                 document.querySelectorAll('.screen').forEach(s => s.style.display = 'block');
 
-                // Remove the no-transition class after a short delay
                 setTimeout(() => {
-                    screen.classList.remove('no-transition'); // Re-enable transition
-                }, 50); // Adjust delay as necessary (50ms should suffice)
+                    screen.classList.remove('no-transition');
+                }, 50);
 
                 currentFullScreen = null;
             } else {
-                // Maximize: Full screen
                 if (currentFullScreen) {
-                    // Minimize the current full screen first
                     currentFullScreen.classList.remove('fullscreen');
-                    currentFullScreen.classList.add('no-transition'); // Disable transition during minimize
+                    currentFullScreen.classList.add('no-transition');
                 }
                 screen.classList.add('fullscreen');
                 document.querySelectorAll('.screen').forEach(s => {
@@ -240,14 +297,12 @@
                 currentFullScreen = screen;
             }
 
-            // Toggle button state
             screen.classList.toggle('on');
         }
 
         function submitText() {
             const text = document.querySelector('.top_left textarea').value;
             console.log('Submitted Text:', text);
-            // You can add functionality here to handle the submitted text
         }
     </script>
 </body>
