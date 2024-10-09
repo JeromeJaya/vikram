@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+/*<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Four Screen Transition</title>
+    <title>Four Screen Transition with Memory Block</title>
     <style>
         * {
             margin: 0;
@@ -24,42 +24,37 @@
             position: absolute;
             width: 50%;
             height: 50%;
-            border: 4px solid grey;
+            border: 4px solid;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 1.5s ease;
-            background-color: white;
             overflow: hidden;
+            background-color: white;
+            border-color: grey;
+            float:none;
         }
 
-        /* Initial positions */
-        .top_left { top: 0; left: 0; }
-        .top_right { top: 0; right: 0; }
-        .bottom_left { bottom: 0; left: 0; }
-        .bottom_right { bottom: 0; right: 0; }
+        .screen.init {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
 
-        /* Fullscreen */
+        .screen.final.top_left { top: 0; left: 0; }
+        .screen.final.top_right { top: 0; right: 0; }
+        .screen.final.bottom_left { bottom: 0; left: 0; }
+        .screen.final.bottom_right { bottom: 0; right: 0; }
+
         .fullscreen {
-            width: 100% !important;
+            width: 50% !important;
             height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
             z-index: 10;
         }
-
-        /* Minimized screens when one screen is maximized */
-        .minimized {
-            width: 50% !important;
-            height: 33.3% !important;
-            position: absolute;
-            right: 0;
-        }
-
-        .minimized.top_left { top: 0; }
-        .minimized.top_right { top: 33.3%; }
-        .minimized.bottom_left { top: 66.6%; }
-        .minimized.bottom_right { display: none; } /* Hide bottom right when full screen */
-
-        /* Toggle button style */
         .on_off {
             position: absolute;
             top: 10px;
@@ -135,6 +130,65 @@
             background-color: #2575fc;
         }
 
+        /* Memory block styles (from memory.html) */
+        .memory-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .blocks-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .block {
+            width: 200px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+        }
+
+        .raw-memory {
+            background-color: gray;
+        }
+
+        .code-memory {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .memory-section {
+            height: 75px;
+            width: 100%;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .yellow {
+            background-color: yellow;
+            color: black;
+        }
+
+        .red {
+            background-color: red;
+        }
+
+        .green {
+            background-color: green;
+        }
+
+        .gray {
+            background-color: gray;
+        }
+
         .zoom-button {
             padding: 10px 20px;
             background-color: gray;
@@ -146,11 +200,19 @@
             right: 10px;
         }
 
+        .zoom-on {
+            transform: scale(1.5);
+        }
+
+        /* Disable transition during zoom */
+        .no-transition {
+            transition: none !important;
+        }
     </style>
 </head>
 <body>
     <!-- Top left screen with input -->
-    <div class="screen top_left">
+    <div class="screen top_left init">
         <div class="on_off" onclick="toggleScreen('top_left')">
             <div class="round"></div>
         </div>
@@ -161,7 +223,7 @@
     </div>
 
     <!-- Top right screen -->
-    <div class="screen top_right">
+    <div class="screen top_right init">
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
@@ -169,7 +231,7 @@
     </div>
 
     <!-- Bottom left screen with memory block -->
-    <div class="screen bottom_left">
+    <div class="screen bottom_left init">
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
         </div>
@@ -189,7 +251,7 @@
     </div>
 
     <!-- Bottom right screen -->
-    <div class="screen bottom_right">
+    <div class="screen bottom_right init">
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
@@ -197,43 +259,113 @@
     </div>
 
     <script>
-        let currentFullScreen = null;
+     /*   let currentFullScreen = null;
 
-        // Function to maximize or minimize screens
+        // Animate screens to their final position after 2 seconds
+        window.onload = () => {
+            setTimeout(() => {
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('init');
+                    screen.classList.add('final');
+                });
+            },2);
+        };
+
         function toggleScreen(screenClass) {
             const screen = document.querySelector(`.${screenClass}`);
             const isFullScreen = screen.classList.contains('fullscreen');
-            const allScreens = document.querySelectorAll('.screen');
 
-            // Reset screens if already maximized
             if (isFullScreen) {
-                resetScreens();
+                screen.classList.remove('fullscreen');
+                screen.classList.add('no-transition');
+                document.querySelectorAll('.screen').forEach(s => s.style.display = 'block');
+
+                setTimeout(() => {
+                    screen.classList.remove('no-transition');
+                }, 50);
+
                 currentFullScreen = null;
             } else {
-                allScreens.forEach(s => s.classList.remove('fullscreen', 'minimized'));
-                currentFullScreen = screenClass;
-
-                // Maximize the selected screen
+                if (currentFullScreen) {
+                    currentFullScreen.classList.remove('fullscreen');
+                    currentFullScreen.classList.add('no-transition');
+                }
                 screen.classList.add('fullscreen');
-
-                // Minimize others
-                allScreens.forEach(s => {
-                    if (!s.classList.contains(screenClass)) {
-                        s.classList.add('minimized');
-                    }
+                document.querySelectorAll('.screen').forEach(s => {
+                    if (s !== screen) {
+                        s.style.display = 'block';
+                        s.style.height  = '33.4%';
+                        s.style.float = 'right';
+                            }
                 });
+                currentFullScreen = screen;
             }
-        }
 
-        // Reset layout to original state
-        function resetScreens() {
-            const allScreens = document.querySelectorAll('.screen');
-            allScreens.forEach(s => s.classList.remove('fullscreen', 'minimized'));
+            screen.classList.toggle('on');
         }
 
         function submitText() {
-            alert('Text Submitted');
+            const text = document.querySelector('.top_left textarea').value;
+            console.log('Submitted Text:', text);
+        }*/
+        ----------------------------------------------------------------------
+            let currentFullScreen = null;  // Tracks the current fullscreen screen
+
+function toggleScreen(screenClass) {
+    const screen = document.querySelector(`.${screenClass}`);
+    const isFullScreen = screen.classList.contains('fullscreen');
+
+    if (isFullScreen) {
+        // Minimize all screens back to their original sizes and positions
+        resetScreens();
+    } else {
+        // If there's already a maximized screen, minimize it
+        if (currentFullScreen) {
+            minimizeScreen(currentFullScreen);
         }
+
+        // Maximize the clicked screen and minimize the rest
+        maximizeScreen(screen);
+        currentFullScreen = screen;  // Track the currently maximized screen
+    }
+
+    screen.classList.toggle('on');
+}
+
+function resetScreens() {
+    // Reset all screens to original sizes and positions
+    document.querySelectorAll('.screen').forEach(screen => {
+        screen.classList.remove('fullscreen');
+        screen.style.width = '50%';
+        screen.style.height = '50%';
+        screen.style.float = 'none'; // Reset alignment
+        screen.classList.remove('no-transition');
+        screen.style.display = 'block';
+    });
+    currentFullScreen = null;  // No screen is maximized anymore
+}
+
+function maximizeScreen(screen) {
+    // Maximize the clicked screen
+    screen.classList.add('fullscreen');
+    screen.style.width = '50%';   // Maximize to half width
+    screen.style.height = '100%'; // Full height
+
+    // Minimize all other screens and arrange them on the left
+    document.querySelectorAll('.screen').forEach(s => {
+        if (s !== screen) {
+            minimizeScreen(s);
+        }
+    });
+}
+
+function minimizeScreen(screen) {
+    // Minimize the screen to 1/3 height and align it on the left
+    screen.style.width = '50%';
+    screen.style.height = '33.3%';
+    screen.style.float = 'left';
+    screen.style.display = 'block';
+}
 
     </script>
 </body>
