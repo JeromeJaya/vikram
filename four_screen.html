@@ -24,14 +24,13 @@
             position: absolute;
             width: 50%;
             height: 50%;
-            border: 4px solid;
+            border: 4px solid grey;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 1.5s ease;
             overflow: hidden;
             background-color: white;
-            border-color: grey;
         }
 
         .screen.init {
@@ -268,7 +267,7 @@
                     screen.classList.remove('init');
                     screen.classList.add('final');
                 });
-            }, 2000);
+            }, 2);
         };
 
         function toggleScreen(screenClass) {
@@ -292,7 +291,10 @@
                 }
                 screen.classList.add('fullscreen');
                 document.querySelectorAll('.screen').forEach(s => {
-                    if (s !== screen) s.style.display = 'none';
+                    if (s !== screen) 
+                        s.style.display = 'block';
+                        s.style.width = '33.34%' ;
+                        
                 });
                 currentFullScreen = screen;
             }
