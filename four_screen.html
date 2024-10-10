@@ -280,6 +280,7 @@
                 document.querySelectorAll('.screen').forEach(s =>{
                     s.style.display = 'block'
                     s.style.height = '50%' ;
+                    s.style.position = 'absolute';
                 });
 
                 setTimeout(() => {
@@ -297,6 +298,7 @@
                     if (s !== screen) 
                         s.style.display = 'block';
                         s.style.height = '33.34%' ;
+                        s.style.position= 'relative';
                         
                 });
                 currentFullScreen = screen;
