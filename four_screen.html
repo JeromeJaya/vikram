@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -267,11 +268,11 @@
                     screen.classList.remove('init');
                     screen.classList.add('final');
                 });
-            },2);
+            }, 2000);
         };
 
         function toggleScreen(screenClass) {
-            const screen = document.querySelector(.${screenClass});
+            const screen = document.querySelector(`.${screenClass}`);
             const isFullScreen = screen.classList.contains('fullscreen');
 
             if (isFullScreen) {
@@ -291,11 +292,7 @@
                 }
                 screen.classList.add('fullscreen');
                 document.querySelectorAll('.screen').forEach(s => {
-                    if (s !== screen) {
-                        s.style.display = 'block';
-                        s.style.height  = '33.4%';
-                        s.style.float = 'right';
-                            }
+                    if (s !== screen) s.style.display = 'none';
                 });
                 currentFullScreen = screen;
             }
