@@ -24,13 +24,14 @@
             position: absolute;
             width: 50%;
             height: 50%;
-            border: 4px solid grey;
+            border: 4px solid;
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 1.5s ease;
             overflow: hidden;
             background-color: white;
+            border-color: grey;
         }
 
         .screen.init {
@@ -140,11 +141,11 @@
         .blocks-container {
             display: flex;
             justify-content: space-between;
-            gap: 20px;
+            gap: 60px;
         }
 
         .block {
-            width: 200px;
+            width: 180px;
             height: 300px;
             display: flex;
             justify-content: center;
@@ -187,7 +188,9 @@
         .gray {
             background-color: gray;
         }
-
+        .purple {
+            background-color: #6a11cb;
+        }
         .zoom-button {
             padding: 10px 20px;
             background-color: gray;
@@ -237,12 +240,14 @@
         <div class="memory-container">
             <div class="blocks-container">
                 <div class="block raw-memory">
-                    <p>Raw Memory</p>
+                    <div class ="block-title">Locked Memory</div>
                 </div>
                 <div class="block code-memory">
+                    <div class ="block-title">Working Memory</div>
+                    <div class="memory-section green">Code Clear and approved by Tester</div>
+                    <div class="memory-section red">Code has tested and declined by tester</div>
+                    <div class="memory-section purple">Code has modified or developed</div>
                     <div class="memory-section yellow">Code Shared to Development Team</div>
-                    <div class="memory-section red">Tested Code with Bugs</div>
-                    <div class="memory-section green">Code Clear, No Bugs</div>
                     <div class="memory-section gray">Raw Code</div>
                 </div>
             </div>
@@ -267,21 +272,17 @@
                     screen.classList.remove('init');
                     screen.classList.add('final');
                 });
-            }, 2);
+            }, 2000);
         };
 
         function toggleScreen(screenClass) {
-            const screen = document.querySelector(`.${screenClass}`);
+            const screen = document.querySelector(.${screenClass});
             const isFullScreen = screen.classList.contains('fullscreen');
 
             if (isFullScreen) {
                 screen.classList.remove('fullscreen');
                 screen.classList.add('no-transition');
-                document.querySelectorAll('.screen').forEach(s =>{
-                    s.style.display = 'block'
-                    s.style.height = '50%' ;
-                    s.style.position = 'absolute';
-                });
+                document.querySelectorAll('.screen').forEach(s => s.style.display = 'block');
 
                 setTimeout(() => {
                     screen.classList.remove('no-transition');
@@ -295,11 +296,7 @@
                 }
                 screen.classList.add('fullscreen');
                 document.querySelectorAll('.screen').forEach(s => {
-                    if (s !== screen) 
-                        s.style.display = 'block';
-                        s.style.height = '33.34%' ;
-                        s.style.position= 'relative';
-                        
+                    if (s !== screen) s.style.display = 'none';
                 });
                 currentFullScreen = screen;
             }
