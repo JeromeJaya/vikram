@@ -16,7 +16,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
             background-color: grey;
         }
 
@@ -29,7 +28,6 @@
             justify-content: center;
             align-items: center;
             transition: all 1.5s ease;
-            overflow: hidden;
             background-color: white;
             border-color: grey;
         }
@@ -46,7 +44,7 @@
         .screen.final.bottom_right { bottom: 0; right: 0; }
 
         .fullscreen {
-            width: 50% !important;
+            width: 100% !important;
             height: 100% !important;
             top: 0 !important;
             left: 0 !important;
@@ -100,14 +98,15 @@
         }
 
         textarea {
-            width: 100%;
-            height: 250px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
+    width: 90%; /* Use percentages to adapt to container size */
+    height: 250px; /* Adjust height relative to the container */
+    border-radius: 5px;
+    border: 3px solid #ccc;
+    padding: 10px;
+    font-size: 1.2em; /* Use relative units like em for scalable font size */
+    transition: all 1.5s ease; /* Smooth transition when resizing */
+}
+
 
         textarea:focus {
             border-color: #6a11cb;
@@ -129,8 +128,9 @@
         button:hover {
             background-color: #2575fc;
         }
+        
 
-        /* Memory block styles (from memory.html) */
+        /* Memory block styles */
         .memory-container {
             display: flex;
             flex-direction: column;
@@ -204,10 +204,10 @@
             transform: scale(1.5);
         }
 
-        /* Disable transition during zoom */
+        /* Disable transition during zoom 
         .no-transition {
             transition: none !important;
-        }
+        }*/
     </style>
 </head>
 <body>
@@ -227,7 +227,8 @@
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div class="screen_text"></div>
+        <div class="screen_text" id="prmt"></div>
+        <button id="clr-prmpt" style ="display: none;" onclick= "clrprmt()"></button>
     </div>
 
     <!-- Bottom left screen with memory block -->
@@ -268,42 +269,53 @@
                     screen.classList.remove('init');
                     screen.classList.add('final');
                 });
-            }, 2000);
+            }, 2);
         };
+function toggleScreen(screenClass) {
+    const screen = document.querySelector(`.${screenClass}`);
+    const isFullScreen = screen.classList.contains('fullscreen');
 
-        function toggleScreen(screenClass) {
-            const screen = document.querySelector(.${screenClass});
-            const isFullScreen = screen.classList.contains('fullscreen');
+    if (isFullScreen) {
+        screen.classList.remove('fullscreen');
+        screen.classList.add('no-transition');
+        document.querySelectorAll('.screen').forEach(s => {
+                s.style.display = 'block' 
+              });
 
-            if (isFullScreen) {
-                screen.classList.remove('fullscreen');
-                screen.classList.add('no-transition');
-                document.querySelectorAll('.screen').forEach(s => s.style.display = 'block');
+        // Resize textarea when minimizing
+        screen.querySelector('textarea').style.width = '95%';
+        screen.querySelector('textarea').style.height = '250px';
 
-                setTimeout(() => {
-                    screen.classList.remove('no-transition');
-                }, 50);
+        setTimeout(() => {
+            screen.classList.remove('no-transition');
+        }, 50);
 
-                currentFullScreen = null;
-            } else {
-                if (currentFullScreen) {
-                    currentFullScreen.classList.remove('fullscreen');
-                    currentFullScreen.classList.add('no-transition');
-                }
-                screen.classList.add('fullscreen');
-                document.querySelectorAll('.screen').forEach(s => {
-                    if (s !== screen) s.style.display = 'none';
-                });
-                currentFullScreen = screen;
-            }
-
-            screen.classList.toggle('on');
+        currentFullScreen = null;
+    } else {
+        if (currentFullScreen) {
+            currentFullScreen.classList.remove('fullscreen');
+            currentFullScreen.classList.add('no-transition');
         }
+        screen.classList.add('fullscreen');
+        document.querySelectorAll('.screen').forEach(s => {
+            if (s !== screen)
+               s.style.display = 'none';
+        });
+
+        // Resize textarea when maximizing
+        screen.querySelector('textarea').style.width = '98%'; // Increase width when fullscreen
+        screen.querySelector('textarea').style.height = '500px'; // Increase height when fullscreen
+
+        currentFullScreen = screen;
+    }
+
+    screen.classList.toggle('on');
+}
 
         function submitText() {
             const text = document.querySelector('.top_left textarea').value;
             console.log('Submitted Text:', text);
-        }
+     }
     </script>
 </body>
 </html>
