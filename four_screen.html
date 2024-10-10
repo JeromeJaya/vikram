@@ -277,7 +277,10 @@
             if (isFullScreen) {
                 screen.classList.remove('fullscreen');
                 screen.classList.add('no-transition');
-                document.querySelectorAll('.screen').forEach(s => s.style.display = 'block');
+                document.querySelectorAll('.screen').forEach(s =>{
+                    s.style.display = 'block'
+                    s.style.height = '50%' ;
+                });
 
                 setTimeout(() => {
                     screen.classList.remove('no-transition');
@@ -293,7 +296,7 @@
                 document.querySelectorAll('.screen').forEach(s => {
                     if (s !== screen) 
                         s.style.display = 'block';
-                        s.style.width = '33.34%' ;
+                        s.style.height = '33.34%' ;
                         
                 });
                 currentFullScreen = screen;
