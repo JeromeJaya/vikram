@@ -141,11 +141,11 @@
         .blocks-container {
             display: flex;
             justify-content: space-between;
-            gap: 60px;
+            gap: 20px;
         }
 
         .block {
-            width: 180px;
+            width: 200px;
             height: 300px;
             display: flex;
             justify-content: center;
@@ -188,9 +188,7 @@
         .gray {
             background-color: gray;
         }
-        .purple {
-            background-color: #6a11cb;
-        }
+
         .zoom-button {
             padding: 10px 20px;
             background-color: gray;
@@ -240,14 +238,12 @@
         <div class="memory-container">
             <div class="blocks-container">
                 <div class="block raw-memory">
-                    <div class ="block-title">Locked Memory</div>
+                    <p>Raw Memory</p>
                 </div>
                 <div class="block code-memory">
-                    <div class ="block-title">Working Memory</div>
-                    <div class="memory-section green">Code Clear and approved by Tester</div>
-                    <div class="memory-section red">Code has tested and declined by tester</div>
-                    <div class="memory-section purple">Code has modified or developed</div>
                     <div class="memory-section yellow">Code Shared to Development Team</div>
+                    <div class="memory-section red">Tested Code with Bugs</div>
+                    <div class="memory-section green">Code Clear, No Bugs</div>
                     <div class="memory-section gray">Raw Code</div>
                 </div>
             </div>
