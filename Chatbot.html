@@ -140,10 +140,10 @@
                 }
             ],
             system_prompt: '',
-            temperature: 0.9,
+            temperature: 0.7,
             top_k: 5,
-            top_p: 0.9,
-            max_tokens: 256,
+            top_p: 0.8,
+            max_tokens: 100,
             web_access: true
         });
 
@@ -161,6 +161,7 @@
             // Check if the response indicates success
             if (result.status) {
                 const botMessage = result.result; // Access the result directly
+                addMessage('bot', 'The bot is thinking...');
                 addMessage('bot', botMessage);
             } else {
                 addMessage('bot', 'Unexpected response format or error from the server.');
