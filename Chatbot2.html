@@ -170,7 +170,7 @@
             console.log('API Response:', result); // Log the response for debugging
 
             if (result.status) {
-                const botMessage = result.result.substring(0, 500); // Access and limit the result to 500 chars
+                const botMessage = result.result.substring(0, 5000); // Access and limit the result to 500 chars
                 addMessage('bot', botMessage);
             } else {
                 addMessage('bot', 'Unexpected response format or error from the server.');
