@@ -157,11 +157,10 @@
 
             const result = await response.json(); // Parse the JSON response
             console.log('API Response:', result); // Log the response for debugging
-
+            addMessage('bot', 'The bot is thinking...');
             // Check if the response indicates success
             if (result.status) {
                 const botMessage = result.result; // Access the result directly
-                addMessage('bot', 'The bot is thinking...');
                 addMessage('bot', botMessage);
             } else {
                 addMessage('bot', 'Unexpected response format or error from the server.');
