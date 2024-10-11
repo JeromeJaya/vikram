@@ -1,202 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jerome's Chatbot</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dark Theme Chatbot</title>
 
-        #chat-container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            max-width: 80%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            height: 80%;
-            bottom: 10px;
-        }
-
-        #chat-box {
-            padding: 10px;
-            height: 800px;
-            overflow-y: scroll;
-            border-bottom: 1px solid #e0e0e0;
-            animation: fadeIn 0.5s ease-in;
-        }
-
-        .user-message, .bot-message {
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: 0px 0px 3px blue;
-            margin: 5px 0;
-            max-width: 80%;
-            position: relative;
-            opacity: 0;
-            animation: slideIn 0.5s forwards;
-        }
-
-        .user-message {
-            background-color: #007bff;
-            color: white;
-            align-self: flex-end;
-            margin-left: auto;
-        }
-
-        .bot-message {
-            background-color: #e0e0e0;
-            color: black;
-            align-self: flex-start;
-        }
-
-        input[type="text"] {
-            border: none;
-            border-top: 1px solid #e0e0e0;
-            padding: 10px;
-            width: calc(100% - 50px);
-            outline: none;
-            border-radius: 0;
-            box-shadow: none;
-            font-size: 16px;
-        }
-
-        #send-button {
-            border: none;
-            padding: 10px 15px;
-            background-color: #28a745;
-            color: white;
-            border-radius: 0;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        #send-button:hover {
-            background-color: #218838;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(10px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        #developer {
-            color: grey;
-            text-align: center;
-            opacity: .1;
-            position: fixed;
-            top: 5%;
-        }
-    </style>
 </head>
 <body>
-<div id="developer"> <h2>JEROME'S API INTEGRATED CHATBOT</h2></div>
-<div id="chat-container">    
-    <div id="chat-box">
-        <div class="bot-message" style="opacity: .2;">INITIALLY IT MAY TAKE A FEW SECONDS TO RESPOND</div>
+  <div class="chat-container">
+    <div class="chatbox" id="chatbox"></div>
+    <div class="input-container">
+      <input type="text" id="userInput" placeholder="Type your message...">
+      <button id="sendBtn">Send</button>
     </div>
-    <div style="display: flex;">
-        <input type="text" id="user-input" placeholder="Type your message..." />
-        <button id="send-button">Send</button>
-    </div>
-</div>
-
-<script>
-    const url = 'https://chatgpt-42.p.rapidapi.com/conversationgpt4-2';
-    const apiKey = 'cd5398045fmsh097aa728517c5e2p142dfbjsn56474f130c02'; // Be careful about hardcoding API keys.
-    
-    document.getElementById('send-button').addEventListener('click', async () => {
-        const userMessage = document.getElementById('user-input').value.trim();
-        
-        if (userMessage === '') {
-            addMessage('bot', 'Please type a message before sending.');
-            return;
-        }
-
-        addMessage('user', userMessage); // Show user message
-
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'x-rapidapi-key': apiKey,
-                'x-rapidapi-host': 'chatgpt-42.p.rapidapi.com',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                messages: [
-                    {
-                        role: 'user',
-                        content: userMessage
-                    }
-                ],
-                system_prompt: '',
-                temperature: 0.9,
-                top_k: 5,
-                top_p: 0.9,
-                max_tokens: 256,
-                web_access: false
-            })
-        };
-
-        try {
-            const response = await fetch(url, requestOptions);
-
-            if (response.status === 401) {
-                addMessage('bot', 'Unauthorized: Please check your API key.');
-            } else if (response.status === 429) {
-                addMessage('bot', 'Rate limit exceeded. Please try again later.');
-            } else if (!response.ok) {
-                throw new Error(`Server Error: ${response.status}`);
-            }
-
-            const result = await response.json(); // Parse the JSON response
-            console.log('API Response:', result); // Log the response for debugging
-
-            if (result.status) {
-                const botMessage = result.result.substring(0, 500); // Access and limit the result to 500 chars
-                addMessage('bot', botMessage);
-            } else {
-                addMessage('bot', 'Unexpected response format or error from the server.');
-            }
-        } catch (error) {
-            console.error('Error:', error);
-            addMessage('bot', 'Sorry, there was an error processing your request.');
-        }
-
-        document.getElementById('user-input').value = ''; // Clear input field
-    });
-
-    function addMessage(sender, message) {
-        const chatBox = document.getElementById('chat-box');
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
-        messageDiv.textContent = message;
-        chatBox.appendChild(messageDiv);
-
-        // Ensure smooth scrolling to the bottom
-        chatBox.scroll({
-            top: chatBox.scrollHeight,
-            behavior: 'smooth'
-        });
-    }
-</script>
-
+  </div>
 </body>
 </html>
+<style>
+/* Dark theme styling */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100vw;
+  background-color: #333;
+}
+
+.chatbox {
+  flex-grow: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background-color: #2d2d2d;
+  border-bottom: 2px solid #444;
+}
+
+.input-container {
+  display: flex;
+  padding: 10px;
+  background-color: #1f1f1f;
+}
+
+input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #444;
+  color: #fff;
+}
+
+input::placeholder {
+  color: #bbb;
+}
+
+button {
+  padding: 10px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Message styles */
+.message {
+  padding: 8px 10px;
+  margin: 5px 0;
+  border-radius: 10px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: #007bff;
+}
+
+.message.bot {
+  align-self: flex-start;
+  background-color: #444;
+}
+</style>
+
+<script>
+document.getElementById('sendBtn').addEventListener('click', async () => {
+  const userInput = document.getElementById('userInput').value;
+  if (userInput.trim() === '') return;
+
+  // Display user's message in chatbox
+  displayMessage(userInput, 'user');
+  
+  // Fetch bot response
+  const response = await getBotResponse(userInput);
+  displayMessage(response, 'bot');
+  
+  // Clear input field
+  document.getElementById('userInput').value = '';
+});
+
+function displayMessage(message, role) {
+  const chatbox = document.getElementById('chatbox');
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message', role);
+  messageElement.textContent = message;
+  chatbox.appendChild(messageElement);
+  chatbox.scrollTop = chatbox.scrollHeight;
+}
+
+async function getBotResponse(userInput) {
+  const url = 'https://open-ai21.p.rapidapi.com/claude3';
+  const options = {
+    method: 'POST',
+    headers: {
+      'x-rapidapi-key': 'cd5398045fmsh097aa728517c5e2p142dfbjsn56474f130c02',
+      'x-rapidapi-host': 'open-ai21.p.rapidapi.com',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      messages: [{ role: 'user', content: userInput }],
+      web_access: false
+    })
+  };
+
+  try {
+    const response = await fetch(url, options);
+    const result = await response.json();
+    return result.choices[0].message.content; // Assuming API response structure
+  } catch (error) {
+    console.error(error);
+    return 'Sorry, something went wrong.';
+  }
+}
+</script>
