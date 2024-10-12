@@ -228,8 +228,8 @@
             <div class="round"></div>
         </div>
         <div id="Alert">BACKEND CHATBOT NOT YET INTEGRATED</div>
-        <div class="screen_text" id="prmt"></div>
-        <button id="clr-prmpt" style ="display: none;" onclick= "clrprmt()"></button>
+        <div class="screen_text" id="prmt">this is sample</div>
+        <button id="clr-prmpt" style ="display: none; text-align: center; bottom:5px;" onclick= "clrprmt()">CLEAR</button>
     </div>
 
     <!-- Bottom left screen with memory block -->
@@ -315,9 +315,11 @@ function toggleScreen(screenClass) {
 
         function submitText() {
             const text = document.querySelector('.top_left textarea').value;
-            
+            document.getElementById('prmt').innerHTML = text;
+            document.getElementById('clr-prmpt').style.display = 'block';
             console.log('Submitted Text:', text);
      }
+        
     </script>
 </body>
 </html>
