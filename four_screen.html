@@ -227,9 +227,9 @@
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div id="Alert">BACKEND CHATBOT NOT YET INTEGRATED</div>
+        <div id="Alert" style ="text-align: center;"><h3>BACKEND CHATBOT NOT YET INTEGRATED</h3></br> <h6>Text submitted on 1st screen will be displayed here</h6></div>
         <div class="screen_text" id="prmt"></div>
-        <button id="clr-prmpt" style ="display: none; text-align: center; bottom:5px;" onclick= "clrprmt()">CLEAR</button>
+        <button id="clr-prmpt" style ="display: none; text-align: center; bottom:5px; postion :absolute;" onclick= "clrprmt()">CLEAR</button>
     </div>
 
     <!-- Bottom left screen with memory block -->
@@ -280,7 +280,7 @@ function toggleScreen(screenClass) {
         screen.classList.remove('fullscreen');
         screen.classList.add('no-transition');
         document.querySelectorAll('.screen').forEach(s => {
-                s.style.display = 'block' 
+                s.style.display = 'flex' 
               });
 
         // Resize textarea when minimizing
@@ -316,12 +316,14 @@ function toggleScreen(screenClass) {
         function submitText() {
             const text = document.querySelector('.top_left textarea').value;
             document.getElementById('prmt').innerHTML = text;
-            document.getElementById('clr-prmpt').style.display = 'block';
+            document.getElementById('clr-prmpt').style.display = 'inline';
             console.log('Submitted Text:', text);
+            document.getElementById('Alert').style.display = 'none'
      }
         function clrprmt() {
             document.getElementById('prmt').innerHTML = '';            
             document.getElementById('clr-prmpt').style.display = 'none';
+            document.getElementById('Alert').style.display = 'block'
         }
         
     </script>
