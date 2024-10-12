@@ -227,6 +227,7 @@
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
+        <div id="Alert">BACKEND CHATBOT NOT YET INTEGRATED</div>
         <div class="screen_text" id="prmt"></div>
         <button id="clr-prmpt" style ="display: none;" onclick= "clrprmt()"></button>
     </div>
@@ -314,6 +315,7 @@ function toggleScreen(screenClass) {
 
         function submitText() {
             const text = document.querySelector('.top_left textarea').value;
+            
             console.log('Submitted Text:', text);
      }
     </script>
