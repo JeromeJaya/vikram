@@ -18,6 +18,16 @@
             align-items: center;
             background-color: grey;
         }
+        .body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 50%;
+            margin: 0;
+overflow:hidden;
+        }
 
         .screen {
             position: absolute;
@@ -194,8 +204,7 @@
             bottom: 5px;
             position: absolute;
         }
-                
-        .container {
+       .container {
             display: grid;
             grid-template-rows: repeat(3, 1fr);
             gap: 50px;
@@ -221,19 +230,19 @@
             bottom: -40px;
         }
         
-        .red {
+        .reddot {
             background-color: red;
         }
         
-        .purple {
+        .purpledot {
             background-color: purple;
         }
         
-        .yellow {
+        .yellowdot {
             background-color: yellow;
         }
         
-        .green {
+        .greendot {
             background-color: green;
         }
         
@@ -241,7 +250,7 @@
             width: 100px;
             height: 60px;
         }
-    </style>  
+ </style>  
     
 </head>
 <body>
@@ -294,7 +303,63 @@
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
-        <div class="container" id="container"></div>
+   <div class="body"> 
+    <div class="container">
+        <div class="row">
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot reddot" , label="code sent"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot reddot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot reddot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot purpledot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot purpledot"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot purpledot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot yellowdot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot yellowdot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot yellowdot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot greendot"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot greendot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot greendot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot greendot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot greendot"></div>
+            </div>
+            <div class="item"><img src="C:\Users\ELCOT\Downloads\screen.jpg" alt="System">
+                <div class="dot greendot"></div>
+            </div>
+        </div>
+    </div>
+         
+       </div>
+
     </div>
     <script>
     let currentFullScreen = null;
@@ -306,7 +371,7 @@
                 screen.classList.remove('init');
                 screen.classList.add('final');
             });
-        }, 2000);  // Corrected to 2000ms for the delay
+        }, 2);  // Corrected to 2ms for the delay
     };
 
     // Toggle screen to fullscreen or back
@@ -352,7 +417,7 @@
                     }
                 ],
                 model: 'gpt-4o',
-                max_tokens: 100,
+                max_tokens: 10,
                 temperature: 0.9
             })
         };
@@ -383,42 +448,6 @@
         screen2.style.display = 'none';
         document.getElementById('clr-prmpt').style.display = 'none';
     }
-</script>
-<script>
-        let numberOfDevices = 20; // Change this number to adjust the number of screens displayed
-
-        function createDevices(count) {
-            const container = document.getElementById('container');
-            container.innerHTML = ''; // Clear existing content
-            const colors = ['red', 'purple', 'yellow', 'green'];
-            let colorIndex = 0;
-
-            for (let i = 0; i < Math.ceil(count / 4); i++) {
-                let row = document.createElement('div');
-                row.className = 'row';
-
-                for (let j = 0; j < 4 && (i * 4 + j) < count; j++) {
-                    let item = document.createElement('div');
-                    item.className = 'item';
-
-                    let img = document.createElement('img');
-                    img.src = 'screen.jpg';
-                    img.alt = 'System';
-
-                    let circle = document.createElement('div');
-                    dot.className = `dot ${colors[colorIndex]}`;
-                    colorIndex = (colorIndex + 1) % colors.length;
-
-                    item.appendChild(img);
-                    item.appendChild(dot);
-                    row.appendChild(item);
-                }
-                container.appendChild(row);
-            }
-        }
-
-        // Call the function with the number of devices to be displayed
-        createDevices(numberOfDevices);
 </script>
 </body>
 </html>
