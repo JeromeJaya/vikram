@@ -194,7 +194,55 @@
             bottom: 5px;
             position: absolute;
         }
-    </style>
+                
+        .container {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 50px;
+        }
+        
+        .row {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 40%;
+            position: absolute;
+            bottom: -40px;
+        }
+        
+        .red {
+            background-color: red;
+        }
+        
+        .purple {
+            background-color: purple;
+        }
+        
+        .yellow {
+            background-color: yellow;
+        }
+        
+        .green {
+            background-color: green;
+        }
+        
+        img {
+            width: 100px;
+            height: 60px;
+        }
+    </style>  
+    
 </head>
 <body>
     <!-- Top left screen with input -->
@@ -246,7 +294,7 @@
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
-        <div class="screen_text"></div>
+        <div class="container" id="container"></div>
     </div>
     <script>
     let currentFullScreen = null;
@@ -336,6 +384,41 @@
         document.getElementById('clr-prmpt').style.display = 'none';
     }
 </script>
+<script>
+        let numberOfDevices = 20; // Change this number to adjust the number of screens displayed
 
+        function createDevices(count) {
+            const container = document.getElementById('container');
+            container.innerHTML = ''; // Clear existing content
+            const colors = ['red', 'purple', 'yellow', 'green'];
+            let colorIndex = 0;
+
+            for (let i = 0; i < Math.ceil(count / 4); i++) {
+                let row = document.createElement('div');
+                row.className = 'row';
+
+                for (let j = 0; j < 4 && (i * 4 + j) < count; j++) {
+                    let item = document.createElement('div');
+                    item.className = 'item';
+
+                    let img = document.createElement('img');
+                    img.src = 'screen.jpg';
+                    img.alt = 'System';
+
+                    let circle = document.createElement('div');
+                    dot.className = `dot ${colors[colorIndex]}`;
+                    colorIndex = (colorIndex + 1) % colors.length;
+
+                    item.appendChild(img);
+                    item.appendChild(dot);
+                    row.appendChild(item);
+                }
+                container.appendChild(row);
+            }
+        }
+
+        // Call the function with the number of devices to be displayed
+        createDevices(numberOfDevices);
+</script>
 </body>
 </html>
