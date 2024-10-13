@@ -98,15 +98,14 @@
         }
 
         textarea {
-    width: 90%; /* Use percentages to adapt to container size */
-    height: 250px; /* Adjust height relative to the container */
-    border-radius: 5px;
-    border: 3px solid #ccc;
-    padding: 10px;
-    font-size: 1.2em; /* Use relative units like em for scalable font size */
-    transition: all 1.5s ease; /* Smooth transition when resizing */
-}
-
+            width: 90%;
+            height: 250px;
+            border-radius: 5px;
+            border: 3px solid #ccc;
+            padding: 10px;
+            font-size: 1.2em;
+            transition: all 1.5s ease;
+        }
 
         textarea:focus {
             border-color: #6a11cb;
@@ -128,7 +127,6 @@
         button:hover {
             background-color: #2575fc;
         }
-        
 
         /* Memory block styles */
         .memory-container {
@@ -189,25 +187,13 @@
             background-color: gray;
         }
 
-        .zoom-button {
-            padding: 10px 20px;
-            background-color: gray;
-            color: white;
-            border: none;
-            cursor: pointer;
+        /* Updated Clear button style */
+        #clr-prmpt {
+            display: none;
+            text-align: center;
+            bottom: 5px;
             position: absolute;
-            top: 10px;
-            right: 10px;
         }
-
-        .zoom-on {
-            transform: scale(1.5);
-        }
-
-        /* Disable transition during zoom 
-        .no-transition {
-            transition: none !important;
-        }*/
     </style>
 </head>
 <body>
@@ -227,9 +213,12 @@
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div id="Alert" style ="text-align: center; display: none;"><h3>BACKEND CHATBOT NOT YET INTEGRATED</h3></br> <h6>Text submitted on 1st screen will be displayed here</h6></div>
+        <div id="Alert" style="text-align: center; display: none;">
+            <h3>BACKEND CHATBOT NOT YET INTEGRATED</h3>
+            <h6>Text submitted on 1st screen will be displayed here</h6>
+        </div>
         <div class="screen_text" id="prmt"></div>
-        <button id="clr-prmpt" style ="display: none; text-align: center; bottom:5px; postion :absolute;" onclick= "clrprmt()">CLEAR</button>
+        <button id="clr-prmpt" onclick="clrprmt()">CLEAR</button>
     </div>
 
     <!-- Bottom left screen with memory block -->
@@ -270,78 +259,87 @@
                     screen.classList.remove('init');
                     screen.classList.add('final');
                 });
-            }, 2);
+            }, 2000);  // Corrected to 2000ms for the delay
         };
-function toggleScreen(screenClass) {
-    const screen = document.querySelector(`.${screenClass}`);
-    const isFullScreen = screen.classList.contains('fullscreen');
 
-    if (isFullScreen) {
-        screen.classList.remove('fullscreen');
-        screen.classList.add('no-transition');
-        document.querySelectorAll('.screen').forEach(s => {
-                s.style.display = 'flex' 
-              });
+        function toggleScreen(screenClass) {
+            const screen = document.querySelector(`.${screenClass}`);
+            const isFullScreen = screen.classList.contains('fullscreen');
 
-        // Resize textarea when minimizing
-        screen.querySelector('textarea').style.width = '95%';
-        screen.querySelector('textarea').style.height = '250px';
+            if (isFullScreen) {
+                screen.classList.remove('fullscreen');
+                screen.classList.add('no-transition');
+                document.querySelectorAll('.screen').forEach(s => {
+                    s.style.display = 'flex';
+                });
 
-        setTimeout(() => {
-            screen.classList.remove('no-transition');
-        }, 50);
+                // Resize textarea when minimizing
+                if (screen.querySelector('textarea')) {
+                    screen.querySelector('textarea').style.width = '95%';
+                    screen.querySelector('textarea').style.height = '250px';
+                }
 
-        currentFullScreen = null;
-    } else {
-        if (currentFullScreen) {
-            currentFullScreen.classList.remove('fullscreen');
-            currentFullScreen.classList.add('no-transition');
+                setTimeout(() => {
+                    screen.classList.remove('no-transition');
+                }, 50);
+
+                currentFullScreen = null;
+            } else {
+                if (currentFullScreen) {
+                    currentFullScreen.classList.remove('fullscreen');
+                    currentFullScreen.classList.add('no-transition');
+                }
+                screen.classList.add('fullscreen');
+                currentFullScreen = screen;
+
+                // Hide all other screens when fullscreen
+                document.querySelectorAll('.screen').forEach(s => {
+                    if (s !== screen) {
+                        s.style.display = 'none';
+                    }
+                });
+
+                // Resize textarea when maximizing
+                if (screen.querySelector('textarea')) {
+                    screen.querySelector('textarea').style.width = '60%';
+                    screen.querySelector('textarea').style.height = '50%';
+                }
+            }
         }
-        screen.classList.add('fullscreen');
-        document.querySelectorAll('.screen').forEach(s => {
-            if (s !== screen)
-               s.style.display = 'none';
-        });
 
-        // Resize textarea when maximizing
-        screen.querySelector('textarea').style.width = '98%'; // Increase width when fullscreen
-        screen.querySelector('textarea').style.height = '500px'; // Increase height when fullscreen
+        function submitText() {
+            const textarea = document.querySelector('textarea');
+            const inputValue = textarea.value;
 
-        currentFullScreen = screen;
-    }
+            fetch('http://127.0.0.1:5000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userInput: inputValue,
+                }),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+                const screen2 = document.getElementById("prmt");
+                screen2.innerText = data.message;
+                screen2.style.display = "block";
+                document.getElementById("clr-prmpt").style.display = "block";
+            })
+            .catch((error) => {
+                const screen2 = document.getElementById("prmt");
+                screen2.innerText = "Server is not running. Please try later.";
+                screen2.style.display = "block";
+            });
+        }
 
-    screen.classList.toggle('on');
-}
         function clrprmt() {
-            document.getElementById('prmt').innerHTML = '';            
-            document.getElementById('clr-prmpt').style.display = 'none';
-            document.getElementById('Alert').style.display = 'block'
+            const screen2 = document.getElementById("prmt");
+            screen2.innerText = "";
+            screen2.style.display = "none";
+            document.getElementById("clr-prmpt").style.display = "none";
         }
-async function submitText() {
-    const text = document.querySelector('.top_left textarea').value;
-    if (text.trim() === "") return;
-
-    // Make a POST request to the backend API
-    try {
-        const response = await fetch('http://127.0.0.1:5000/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ input: text })
-        });
-
-        const data = await response.json();
-        const chatbotResponse = data.response;
-
-        // Display the chatbot's response in the top right screen
-        document.getElementById('prmt').innerHTML = chatbotResponse;
-        document.getElementById('clr-prmpt').style.display = 'inline';
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
     </script>
 </body>
 </html>
