@@ -227,7 +227,7 @@
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div id="Alert" style ="text-align: center;"><h3>BACKEND CHATBOT NOT YET INTEGRATED</h3></br> <h6>Text submitted on 1st screen will be displayed here</h6></div>
+        <div id="Alert" style ="text-align: center; display: none;"><h3>BACKEND CHATBOT NOT YET INTEGRATED</h3></br> <h6>Text submitted on 1st screen will be displayed here</h6></div>
         <div class="screen_text" id="prmt"></div>
         <button id="clr-prmpt" style ="display: none; text-align: center; bottom:5px; postion :absolute;" onclick= "clrprmt()">CLEAR</button>
     </div>
@@ -312,20 +312,36 @@ function toggleScreen(screenClass) {
 
     screen.classList.toggle('on');
 }
-
-        function submitText() {
-            const text = document.querySelector('.top_left textarea').value;
-            document.getElementById('prmt').innerHTML = text;
-            document.getElementById('clr-prmpt').style.display = 'inline';
-            console.log('Submitted Text:', text);
-            document.getElementById('Alert').style.display = 'none'
-     }
         function clrprmt() {
             document.getElementById('prmt').innerHTML = '';            
             document.getElementById('clr-prmpt').style.display = 'none';
             document.getElementById('Alert').style.display = 'block'
         }
-        
+async function submitText() {
+    const text = document.querySelector('.top_left textarea').value;
+    if (text.trim() === "") return;
+
+    // Make a POST request to the backend API
+    try {
+        const response = await fetch('http://127.0.0.1:5000/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ input: text })
+        });
+
+        const data = await response.json();
+        const chatbotResponse = data.response;
+
+        // Display the chatbot's response in the top right screen
+        document.getElementById('prmt').innerHTML = chatbotResponse;
+        document.getElementById('clr-prmpt').style.display = 'inline';
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
     </script>
 </body>
 </html>
