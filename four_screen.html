@@ -248,100 +248,94 @@
         </div>
         <div class="screen_text"></div>
     </div>
-
     <script>
-        let currentFullScreen = null;
+    let currentFullScreen = null;
 
-        // Animate screens to their final position after 2 seconds
-        window.onload = () => {
-            setTimeout(() => {
-                document.querySelectorAll('.screen').forEach(screen => {
-                    screen.classList.remove('init');
-                    screen.classList.add('final');
-                });
-            }, 2000);  // Corrected to 2000ms for the delay
+    // Animate screens to their final position after 2 seconds
+    window.onload = () => {
+        setTimeout(() => {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('init');
+                screen.classList.add('final');
+            });
+        }, 2000);  // Corrected to 2000ms for the delay
+    };
+
+    // Toggle screen to fullscreen or back
+    function toggleScreen(screenClass) {
+        const screen = document.querySelector(`.${screenClass}`);
+        const isFullScreen = screen.classList.contains('fullscreen');
+
+        if (isFullScreen) {
+            screen.classList.remove('fullscreen');
+            screen.classList.add('no-transition');
+            document.querySelectorAll('.screen').forEach(s => {
+                s.style.display = 'flex';
+            });
+        } else {
+            screen.classList.add('fullscreen');
+        }
+    }
+
+    // Submit text from the textarea to the chatbot API
+    async function submitText() {
+        const textarea = document.querySelector('textarea');
+        const userPrompt = textarea.value.trim();
+
+        if (!userPrompt) {
+            alert('Please enter a prompt!');
+            return;
+        }
+
+        // API options and request configuration
+        const url = 'https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions';
+        const options = {
+            method: 'POST',
+            headers: {
+                'x-rapidapi-key': 'cd5398045fmsh097aa728517c5e2p142dfbjsn56474f130c02',
+                'x-rapidapi-host': 'cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                messages: [
+                    {
+                        role: 'user',
+                        content: userPrompt
+                    }
+                ],
+                model: 'gpt-4o',
+                max_tokens: 100,
+                temperature: 0.9
+            })
         };
 
-        function toggleScreen(screenClass) {
-            const screen = document.querySelector(`.${screenClass}`);
-            const isFullScreen = screen.classList.contains('fullscreen');
+        try {
+            // Fetch chatbot response
+            const response = await fetch(url, options);
+            const result = await response.json();
 
-            if (isFullScreen) {
-                screen.classList.remove('fullscreen');
-                screen.classList.add('no-transition');
-                document.querySelectorAll('.screen').forEach(s => {
-                    s.style.display = 'flex';
-                });
+            // Display the chatbot response on the top right screen
+            const screen2 = document.getElementById('prmt');
+            screen2.innerText = result.choices[0].message.content;
+            screen2.style.display = 'block';
 
-                // Resize textarea when minimizing
-                if (screen.querySelector('textarea')) {
-                    screen.querySelector('textarea').style.width = '95%';
-                    screen.querySelector('textarea').style.height = '250px';
-                }
+            // Show clear button
+            document.getElementById('clr-prmpt').style.display = 'block';
 
-                setTimeout(() => {
-                    screen.classList.remove('no-transition');
-                }, 50);
-
-                currentFullScreen = null;
-            } else {
-                if (currentFullScreen) {
-                    currentFullScreen.classList.remove('fullscreen');
-                    currentFullScreen.classList.add('no-transition');
-                }
-                screen.classList.add('fullscreen');
-                currentFullScreen = screen;
-
-                // Hide all other screens when fullscreen
-                document.querySelectorAll('.screen').forEach(s => {
-                    if (s !== screen) {
-                        s.style.display = 'none';
-                    }
-                });
-
-                // Resize textarea when maximizing
-                if (screen.querySelector('textarea')) {
-                    screen.querySelector('textarea').style.width = '60%';
-                    screen.querySelector('textarea').style.height = '50%';
-                }
-            }
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while connecting to the chatbot.');
         }
+    }
 
-       function submitText() {
-    const textarea = document.querySelector('textarea');
-    const inputValue = textarea.value;
+    // Clear the response on the top-right screen
+    function clrprmt() {
+        const screen2 = document.getElementById('prmt');
+        screen2.innerText = '';
+        screen2.style.display = 'none';
+        document.getElementById('clr-prmpt').style.display = 'none';
+    }
+</script>
 
-    fetch('http://127.0.0.1:5000/chat', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            input: inputValue,  // Corrected key to match Flask code
-        }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-        const screen2 = document.getElementById("prmt");
-        screen2.innerText = data.response;  // Corrected to access the 'response' key
-        screen2.style.display = "block";
-        document.getElementById("clr-prmpt").style.display = "block";
-    })
-    .catch((error) => {
-        const screen2 = document.getElementById("prmt");
-        screen2.innerText = "Server is not running. Please try later.";
-        screen2.style.display = "block";
-    });
-}
-
-
-        function clrprmt() {
-            const screen2 = document.getElementById("prmt");
-            screen2.innerText = "";
-            screen2.style.display = "none";
-            document.getElementById("clr-prmpt").style.display = "none";
-        }
-
-    </script>
 </body>
 </html>
