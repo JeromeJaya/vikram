@@ -307,32 +307,33 @@
             }
         }
 
-        function submitText() {
-            const textarea = document.querySelector('textarea');
-            const inputValue = textarea.value;
+       function submitText() {
+    const textarea = document.querySelector('textarea');
+    const inputValue = textarea.value;
 
-            fetch('http://127.0.0.1:5000/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    userInput: inputValue,
-                }),
-            })
-            .then((response) => response.json())
-            .then((data) => {
-                const screen2 = document.getElementById("prmt");
-                screen2.innerText = data.message;
-                screen2.style.display = "block";
-                document.getElementById("clr-prmpt").style.display = "block";
-            })
-            .catch((error) => {
-                const screen2 = document.getElementById("prmt");
-                screen2.innerText = "Server is not running. Please try later.";
-                screen2.style.display = "block";
-            });
-        }
+    fetch('http://127.0.0.1:5000/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            input: inputValue,  // Corrected key to match Flask code
+        }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+        const screen2 = document.getElementById("prmt");
+        screen2.innerText = data.response;  // Corrected to access the 'response' key
+        screen2.style.display = "block";
+        document.getElementById("clr-prmpt").style.display = "block";
+    })
+    .catch((error) => {
+        const screen2 = document.getElementById("prmt");
+        screen2.innerText = "Server is not running. Please try later.";
+        screen2.style.display = "block";
+    });
+}
+
 
         function clrprmt() {
             const screen2 = document.getElementById("prmt");
