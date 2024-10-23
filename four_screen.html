@@ -261,7 +261,7 @@ overflow:hidden;
         </div>
         <div class="input-container">
             <textarea placeholder="Enter your text here..."></textarea>
-            <button type="button" onclick= "submitText()">Submit the text</button>
+            <button type="button"><a href="https://copilot.microsoft.com/">Submit</a></button>
         </div>
     </div>
 
@@ -376,7 +376,7 @@ overflow:hidden;
 
     // Toggle screen to fullscreen or back
     function toggleScreen(screenClass) {
-        const screen = document.querySelector(`.${screenClass}`);
+        const screen = document.querySelector(.${screenClass});
         const isFullScreen = screen.classList.contains('fullscreen');
 
         if (isFullScreen) {
@@ -405,8 +405,8 @@ overflow:hidden;
         const options = {
             method: 'POST',
             headers: {
-                'x-rapidapi-key': 'AIzaSyAFwiGw-g89uKy3Sgy7v5S8rklApFDL9Oc',
-                'x-rapidapi-host': 'https://0.0.0.0:6012/generate_code/',
+                'x-rapidapi-key': 'bf15dae1c8mshd4a89c73f10c3d8p19f74ejsn26a5ee0689db',
+                'x-rapidapi-host': 'cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -416,7 +416,7 @@ overflow:hidden;
                         content: userPrompt
                     }
                 ],
-                model_name="gemini-1.5-flash",
+                model: 'gpt-4o',
                 max_tokens: 600,
                 temperature: 0.9
             })
