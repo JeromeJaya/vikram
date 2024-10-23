@@ -1,35 +1,39 @@
+# main.py
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 import os
-import google.generativeai as genai
-from dotenv import load_dotenv
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+import litellm
+import uvicorn
 
-# Load environment variables
-load_dotenv()
+# Setting the Gemini API key
+os.environ["GEMINI_API_KEY"] = "AIzaSyAFwiGw-g89uKy3Sgy7v5S8rklApFDL9Oc"
+
+# Create the FastAPI app
+app = FastAPI()
+
+# Define the input schema using Pydantic
+class RequirementInput(BaseModel):
+    requirements: str
+
+# API endpoint to handle requirements and interact with Gemini API
+@app.post("/generate_code/")
+async def generate_code(input_data: RequirementInput):
+    try:
+        # Interacting with Gemini API
+        response = litellm.completion(
+            model="gemini/gemini-1.5-flash",
+            messages=[{"role": "user", "content": f"write a code for the given requirements: {input_data.requirements}"}]
+        )
+        
+        # Extracting the generated code
+        generated_code = response.choices[0].message.json()
+
+        return {"code": generated_code, "message": "Code generated and requirements.txt created successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error occurred: {str(e)}")
 
 
-# Configure the Gemini API
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-# Set up the model
-model = genai.GenerativeModel('gemini-pro')
-
-bot = Flask(__name__)
-CORS (bot)
-
-@bot.route('/chat', methods=['POST'])
-def chat():
-    data = request.json
-    user_input = data.get('input')
-    if not user_input :
-        return jsonify ({"error":"no message provided"}),400
-    # Start a conversation
-    chat = model.start_chat(history=[])
-    
-    # Generate a response
-    response = chat.send_message(user_input)
-    
-    return jsonify({'response': response.text})
-
-if __name__ == '__main__':
-    bot.run(debug=True, port = os.getenv("PORT",default =5000))
+# Main block to run the app on port 6012
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=6012)
