@@ -1,35 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chatbot Selection</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Four Screen</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: grey;
+        }
+
+        .body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 50%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .screen {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            border: 4px solid;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 1.5s ease;
+            background-color: white;
+            border-color: grey;
+        }
+       .upload-container {
+      text-align: center;
+      padding: 10px;
     }
 
-    body, html {
-      height: 100%;
-      display: flex;
+        .screen.init {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .screen.final.top_left { top: 0; left: 0; }
+        .screen.final.top_right { top: 0; right: 0; }
+        .screen.final.bottom_left { bottom: 0; left: 0; }
+        .screen.final.bottom_right { bottom: 0; right: 0; }
+
+        .fullscreen {
+            width: 100% !important;
+            height: 100% !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            z-index: 10;
+        }
+
+        .on_off {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 40px;
+            height: 20px;
+            border: 2px solid black;
+            border-radius: 100px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 0 5px;
+            background-color: white;
+            transition: background-color 1s;
+        }
+
+        .round {
+            width: 5px;
+            height: 5px;
+            background-color: red;
+            border-radius: 50%;
+            transition: all 0.5s ease;
+        }
+
+        .on .on_off {
+            background-color: red;
+            justify-content: flex-end;
+        }
+
+        .on .round {
+            background-color: green;
+        }
+    chatbot-body {
+      height: 90%;
+      width:100%;
       justify-content: center;
       align-items: center;
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0; /* Light gray background for the page */
     }
-
+.chatbot-container-cover{
+      overflow-y: auto;
+      width: 90%;
+}
     .chatbot-container {
       display: flex;
+      overflow-y: auto;
       flex-direction: column;
-      gap: 15px; /* Space between buttons */
-      width: 90%;
-      max-width: 400px; /* Limit the width of the buttons */
+      gap: 10px; /* Space between buttons */
     }
 
     .chatbot-btn {
-      padding: 15px;
+      padding: 10px;
       font-size: 1.2rem;
       border: none;
       border-radius: 10px; /* Curved edges */
@@ -49,23 +140,380 @@
     .chatbot-btn:active {
       background-color: #c0c0c0;
     }
-  </style>
+        /* Input container for the first screen */
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 90%;
+        }
+
+        textarea {
+            width: 90%;
+            height: 250px;
+            border-radius: 5px;
+            border: 3px solid #ccc;
+            padding: 10px;
+            font-size: 1.2em;
+            transition: all 1.5s ease;
+        }
+
+        textarea:focus {
+            border-color: #6a11cb;
+            outline: none;
+        }
+
+        button {
+            margin-top: 5px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: grey;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2575fc;
+        }
+    input[type="file"], #textformat {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 50%;
+      border: solid 5px;
+      border-radius: 5px;
+    }
+
+    .upload-button {
+      display: block;
+      margin-top: 20px;
+      margin-left: 40%;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .upload-button:hover {
+      background-color: #45a049;
+    }
+        /* Memory block styles */
+        .memory-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .blocks-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .block {
+            width: 200px;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid black;
+        }
+
+        .raw-memory {
+            background-color: gray;
+        }
+
+        .code-memory {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .memory-section {
+            height: 75px;
+            width: 100%;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .yellow { background-color: yellow; color: black; }
+        .red { background-color: red; }
+        .green { background-color: green; }
+        .gray { background-color: gray; }
+
+
+
+        /* Updated Clear button style */
+        #clr-prmpt {
+            display: none;
+            text-align: center;
+            bottom: 5px;
+            position: absolute;
+        }
+
+        .container {
+            display: grid;
+            grid-template-rows: repeat(3, 1fr);
+            gap: 50px;
+        }
+
+        .row {
+            display: flex;
+            gap: 30px;
+        }
+
+        .item {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 40%;
+            position: absolute;
+            bottom: -40px;
+        }
+
+        .reddot { background-color: red; }
+        .purpledot { background-color: purple; }
+        .yellowdot { background-color: yellow; }
+        .greendot { background-color: green; }
+
+        img {
+            width: 100px;
+            height: 60px;
+        }
+    </style>  
 </head>
 <body>
-
-  <div class="chatbot-container">
-    <button onclick="redirectTo('https://chat.openai.com')" class="chatbot-btn">ChatGPT</button>
-    <button onclick="redirectTo('https://www.google.com/gemini')" class="chatbot-btn">Gemini</button>
-    <button onclick="redirectTo('https://claude.ai/new')" class="chatbot-btn">Claude</button>
-    <button onclick="redirectTo('https://copilot.microsoft.com/')" class="chatbot-btn">Copilot</button>
-    <button onclick="redirectTo('https://v0.dev/')" class="chatbot-btn">v0.dev</button>
+    <!-- Top left screen with input -->
+    <div class="screen top_left init">
+        <div class="on_off" onclick="toggleScreen('top_left')">
+            <div class="round"></div>
+        </div>
+        <div class="input-container" id ="ic">
+            <textarea id ="UserInput"placeholder="Type or Past the prompt here..."></textarea>
+            <button type="button" aria-label="Submit text" onclick="submitText()">COPY TEXT & FIND AI SOLUTION </button>
+        </div>
+  <chatbot-body id="bots_list" style="display:none;">
+  <div class="chatbot-containerchatbot-container-cover">
+    <div class="chatbot-container">
+     <button onclick="redirectTo('https://chat.openai.com')" class="chatbot-btn" id="bot-btn">ChatGPT</button>
+      <button onclick="redirectTo('https://www.google.com/gemini')" class="chatbot-btn id="bot-btn">Gemini</button>
+      <button onclick="redirectTo('https://claude.ai/new')" class="chatbot-btn" id="bot-btn">Claude</button>
+      <button onclick="redirectTo('https://copilot.microsoft.com/')" class="chatbot-btn" id="bot-btn">Copilot</button>
+      <button onclick="redirectTo('https://v0.dev/')" class="chatbot-btn" id="bot-btn">v0.dev</button>
+      <button class="chatbot-btn" id="modify prompt" onclick=modify() id="bot-btn">MODIFY THE PROMPT</button>
+    </div>
   </div>
+</chatbot-body>
+    </div>
 
-  <script>
+    <!-- Top right screen -->
+    <div class="screen top_right init">
+        <div class="on_off" onclick="toggleScreen('top_right')">
+            <div class="round"></div>
+        </div>
+        <div class="upload-container" style="display:'none';">
+            <h1> Upload the AI generated solution here. Either in text or PDF formate.<h1>
+            <input type="file" id="fileInput" accept=".pdf, .doc, .docx">
+            <input id ="textformat" placeholder=" you can also submit in text format...">
+            <button class="upload-button" onclick="uploadFile()">Upload</button>
+        </div>
+        <button id="clr-prmpt" onclick="clrprmt()">CLEAR</button>
+    </div>
+
+    <!-- Bottom left screen with memory block -->
+    <div class="screen bottom_left init">
+        <div class="on_off" onclick="toggleScreen('bottom_left')">
+            <div class="round"></div>
+        </div>
+        <div class="memory-container">
+            <div class="blocks-container">
+                <div class="block raw-memory">
+                    <p>Raw Memory</p>
+                </div>
+                <div class="block code-memory">
+                    <div class="memory-section yellow">Code Shared to Development Team</div>
+                    <div class="memory-section red">Tested Code with Bugs</div>
+                    <div class="memory-section green">Code Clear, No Bugs</div>
+                    <div class="memory-section gray">Raw Code</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom right screen -->
+    <div class="screen bottom_right init">
+        <div class="on_off" onclick="toggleScreen('bottom_right')">
+            <div class="round"></div>
+        </div>
+        <div class="body"> 
+            <div class="container">
+                <div class="row">
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot reddot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot reddot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot reddot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot purpledot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot purpledot"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot purpledot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot yellowdot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot yellowdot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot yellowdot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot greendot"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot greendot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot greendot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot greendot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot greendot"></div>
+                    </div>
+                    <div class="item"><img src="screen.jpg" alt="System">
+                        <div class="dot greendot"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFullScreen = null;
+
+        // Animate screens to their final position after 2 seconds
+        window.onload = () => {
+            setTimeout(() => {
+                document.querySelectorAll('.screen').forEach(screen => {
+                    screen.classList.remove('init');
+                    screen.classList.add('final');
+                });
+            }, 2);  // Delay for initial animation
+        };
+
+        // Toggle screen to fullscreen or back
+        function toggleScreen(screenClass) {
+            const screen = document.querySelector(`.${screenClass}`);
+            const isFullScreen = screen.classList.contains('fullscreen');
+            const botbtn = document.getElementById('bot-btn');
+              botbtn.style.padding = "15px"; 
+
+            if (isFullScreen) {
+                screen.classList.remove('fullscreen');
+                screen.classList.add('no-transition');
+                document.querySelectorAll('.screen').forEach(s => {
+                    s.style.display = 'flex';
+                });
+            } else {
+                screen.classList.add('fullscreen');
+            }
+        }
+
+        // Submit text from the textarea to the chatbot API
+        async function submitText() {
+      // Get the input field and select its content
+      const inputField = document.getElementById("UserInput");
+      
+      inputField.select();
+      inputField.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the text to the clipboard
+      const text = inputField.value;
+      /**const start = "'";
+      const end = "' generate the out put in a pdf formate in download able formate.";
+      const txt = start + text + end;**/
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert("Text you entered copied to clipboard! Now choose a chatbot to redirect to the respective official chatbot & generate the AI solution. Once the ai solution is ready, come back here and upload the solution in the top right screen.");
+        })
+        .catch(err => {
+          console.error("Failed to copy text: ", err);
+        });
+       //displaying the chatbots
+          const bots = document.getElementById('bots_list');
+          bots.style.display="flex";
+          const data = document.getElementById('ic');
+          data.style.display="none";
+                    }
+        function modify(){
+           
+          const bots = document.getElementById('bots_list');
+          bots.style.display="none";
+          const data = document.getElementById('ic');
+          data.style.display="flex";
+           }
+        // Clear the response on the top-right screen
+        function clrprmt() {
+            const screen2 = document.getElementById('prmt');
+            screen2.innerText = '';
+            screen2.style.display = 'none';
+            document.getElementById('clr-prmpt').style.display = 'none';
+
+            // Clear the textarea
+            document.querySelector('textarea').value = '';
+        }
+
     function redirectTo(url) {
       window.location.href = url;
     }
-  </script>
+    function uploadFile() {
+      const fileInput = document.getElementById("fileInput");
+      const fileStatus = document.getElementById("fileStatus");
 
+      if (fileInput.files.length === 0) {
+        fileStatus.textContent = "No file selected.";
+        alert("FIRST CHOOSE A FILE");
+      } else {
+        const file = fileInput.files[0];
+        fileStatus.textContent = `File '${file.name}' selected and ready for upload.`;
+        
+        // Here, add code to upload the file to the server if needed
+        // e.g., using Fetch or AJAX to send the file to a backend
+      }
+    }
+    </script>
 </body>
+</html>
 </html>
