@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Selection</title>
+</head>
+<body>
+
+  <div class="chatbot-container">
+    <button id="chatgpt-btn" class="chatbot-btn" src = "chatgpt.com" href="chatgpt.com">ChatGPT</button>
+    <button id="gemini-btn" class="chatbot-btn">Gemini</button>
+    <button id="claude-btn" class="chatbot-btn">Claude</button>
+    <button id="copilot-btn" class="chatbot-btn">Copilot</button>
+    <button id="llama-btn" class="chatbot-btn">LLaMA</button>
+  </div>
+</body>
+<style>
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.chatbot-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.chatbot-btn {
+  flex: 1;
+  padding: 20px;
+  font-size: 1.5rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Different colors for each chatbot button */
+#chatgpt-btn { background-color: #4a90e2; }
+#gemini-btn { background-color: #e94e77; }
+#claude-btn { background-color: #f5a623; }
+#copilot-btn { background-color: #8c4eff; }
+#llama-btn { background-color: #4caf50; }
+
+/* Button hover effects */
+.chatbot-btn:hover {
+  opacity: 0.9;
+}
+
+</style>
+  
+<script>
+  document.getElementById("chatgpt-btn").addEventListener("click", () => {
+  alert("ChatGPT selected");
+});
+
+document.getElementById("gemini-btn").addEventListener("click", () => {
+  alert("Gemini selected");
+});
+
+document.getElementById("claude-btn").addEventListener("click", () => {
+  alert("Claude selected");
+});
+
+document.getElementById("copilot-btn").addEventListener("click", () => {
+  alert("Copilot selected");
+});
+
+document.getElementById("llama-btn").addEventListener("click", () => {
+  alert("LLaMA selected");
+});
+
+</script>
+  
+</html>
