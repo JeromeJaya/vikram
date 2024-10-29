@@ -4,84 +4,68 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chatbot Selection</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0; /* Light gray background for the page */
+    }
+
+    .chatbot-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px; /* Space between buttons */
+      width: 90%;
+      max-width: 400px; /* Limit the width of the buttons */
+    }
+
+    .chatbot-btn {
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px; /* Curved edges */
+      color: #333; /* Dark gray text color */
+      background-color: #e0e0e0; /* Light gray background */
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+
+    /* Hover effect */
+    .chatbot-btn:hover {
+      background-color: #d0d0d0;
+      transform: scale(1.02); /* Slightly larger on hover */
+    }
+
+    .chatbot-btn:active {
+      background-color: #c0c0c0;
+    }
+  </style>
 </head>
 <body>
 
   <div class="chatbot-container">
-    <button id="chatgpt-btn" class="chatbot-btn" src = "chatgpt.com" href="chatgpt.com">ChatGPT</button>
-    <button id="gemini-btn" class="chatbot-btn">Gemini</button>
-    <button id="claude-btn" class="chatbot-btn">Claude</button>
-    <button id="copilot-btn" class="chatbot-btn">Copilot</button>
-    <button id="llama-btn" class="chatbot-btn">LLaMA</button>
+    <button onclick="redirectTo('https://chat.openai.com')" class="chatbot-btn">ChatGPT</button>
+    <button onclick="redirectTo('https://www.google.com/gemini')" class="chatbot-btn">Gemini</button>
+    <button onclick="redirectTo('https://www.anthropic.com/claude')" class="chatbot-btn">Claude</button>
+    <button onclick="redirectTo('https://github.com/features/copilot')" class="chatbot-btn">Copilot</button>
+    <button onclick="redirectTo('https://www.meta.com/llama')" class="chatbot-btn">LLaMA</button>
   </div>
+
+  <script>
+    function redirectTo(url) {
+      window.location.href = url;
+    }
+  </script>
+
 </body>
-<style>
-  * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body, html {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-family: Arial, sans-serif;
-}
-
-.chatbot-container {
-  display: flex;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.chatbot-btn {
-  flex: 1;
-  padding: 20px;
-  font-size: 1.5rem;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-/* Different colors for each chatbot button */
-#chatgpt-btn { background-color: #4a90e2; }
-#gemini-btn { background-color: #e94e77; }
-#claude-btn { background-color: #f5a623; }
-#copilot-btn { background-color: #8c4eff; }
-#llama-btn { background-color: #4caf50; }
-
-/* Button hover effects */
-.chatbot-btn:hover {
-  opacity: 0.9;
-}
-
-</style>
-  
-<script>
-  document.getElementById("chatgpt-btn").addEventListener("click", () => {
-  alert("ChatGPT selected");
-});
-
-document.getElementById("gemini-btn").addEventListener("click", () => {
-  alert("Gemini selected");
-});
-
-document.getElementById("claude-btn").addEventListener("click", () => {
-  alert("Claude selected");
-});
-
-document.getElementById("copilot-btn").addEventListener("click", () => {
-  alert("Copilot selected");
-});
-
-document.getElementById("llama-btn").addEventListener("click", () => {
-  alert("LLaMA selected");
-});
-
-</script>
-  
 </html>
