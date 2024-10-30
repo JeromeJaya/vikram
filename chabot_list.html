@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <title>Four Screen</title>
     <style>
         * {
@@ -150,7 +151,7 @@
             width: 90%;
         }
 
-        textarea {
+        textarea, #textformat {
             width: 90%;
             height: 250px;
             border-radius: 5px;
@@ -165,7 +166,7 @@
             outline: none;
         }
 
-        button {
+        button, .upload-button {
             margin-top: 5px;
             padding: 10px;
             border: none;
@@ -180,6 +181,9 @@
         button:hover {
             background-color: #2575fc;
         }
+        .upload-button {
+            background-color: #2575fc;            
+        }
     input[type="file"], #textformat {
       margin-top: 10px;
       padding: 10px;
@@ -189,20 +193,6 @@
       border: solid 1px;
       border-radius: 5px;
     }
-
-    .upload-button {
-      display: block;
-      margin-top: 20px;
-      margin-left: 40%;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
     .upload-button:hover {
       background-color: #45a049;
     }
@@ -308,7 +298,7 @@
         </div>
         <div class="input-container" id ="ic">
             <textarea id ="UserInput"placeholder="Type or Past the prompt here..."></textarea>
-            <button type="button" aria-label="Submit text" onclick="submitText()">COPY TEXT & FIND AI SOLUTION </button>
+            <button type="button" aria-label="Submit text" onclick="redirectTo('https://copilot.microsoft.com/')">COPY TEXT & FIND AI SOLUTION </button>
         </div>
   <chatbot-body id="bots_list" style="display:none;">
   <div class="chatbot-containerchatbot-container-cover">
@@ -330,10 +320,9 @@
             <div class="round"></div>
         </div>
         <div class="upload-container" style="display:'none';">
-            <h1> Upload the AI generated solution here. Either in text or PDF formate.<h1>
-            <input type="file" id="fileInput" accept=".pdf, .doc, .docx">
-            <input id ="textformat" placeholder=" you can also submit in text format...">
-            <button class="upload-button" onclick="uploadFile()">Upload</button>
+            <h3> Upload the AI generated solution here. Text will be converted to PDF format. This pdf will be automatically sent to developer and you can also download a copy. </h3>
+            <input id ="textformat" placeholder="PAST THE SOLUTION AI GENERATED SOLUTION">
+            <button class="upload-button" onclick="uploadFile()">Upload & Download a copy</button>
         </div>
         <button id="clr-prmpt" onclick="clrprmt()">CLEAR</button>
     </div>
@@ -473,9 +462,7 @@
         });
        //displaying the chatbots
           const bots = document.getElementById('bots_list');
-          bots.style.display="flex";
           const data = document.getElementById('ic');
-          data.style.display="none";
                     }
         function modify(){
            
@@ -499,19 +486,11 @@
       window.location.href = url;
     }
     function uploadFile() {
-      const fileInput = document.getElementById("fileInput");
-      const fileStatus = document.getElementById("fileStatus");
-
-      if (fileInput.files.length === 0) {
-        fileStatus.textContent = "No file selected.";
-        alert("FIRST CHOOSE A FILE");
-      } else {
-        const file = fileInput.files[0];
-        fileStatus.textContent = `File '${file.name}' selected and ready for upload.`;
-        
-        // Here, add code to upload the file to the server if needed
-        // e.g., using Fetch or AJAX to send the file to a backend
-      }
+      const { jsPDF } = window.jspdf; // Load jsPDF
+      const pdf = new jsPDF();
+      const text = document.getElementById("textformat").value;
+      pdf.text(text, 10, 10); // Adds text to PDF (x=10, y=10 coordinates)
+      pdf.save("download.pdf"); // Saves the PDF with the name "download.pdf"
     }
     </script>
 </body>
