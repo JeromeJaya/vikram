@@ -522,10 +522,31 @@
       const { jsPDF } = window.jspdf; // Load jsPDF
       const pdf = new jsPDF();
       const text = document.getElementById("textformat").value;
-      pdf.text(text, 10, 10); // Adds text to PDF (x=10, y=10 coordinates)
+
+// Define the maximum width and height for the text on each page
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 10; // Set margins for better readability
+  const maxWidth = pageWidth - margin * 2;
+  const lineHeight = 10; // Height for each line of text
+
+      // Split text into lines that fit within the max width
+  const lines = pdf.splitTextToSize(text, maxWidth);
+  let yPosition = margin;
+
+  lines.forEach((line, index) => {
+    // Check if adding this line exceeds the page height
+    if (yPosition + lineHeight > pageHeight - margin) {
+      pdf.addPage(); // Add a new page
+      yPosition = margin; // Reset yPosition to start from the top
+    }
+
+    pdf.text(line, margin, yPosition);
+    yPosition += lineHeight; // Move down for the next line
+  });
+
       pdf.save("download.pdf"); // Saves the PDF with the name "download.pdf"
     }
     </script>
 </body>
-</html>
 </html>
