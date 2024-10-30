@@ -43,10 +43,6 @@
             background-color: white;
             border-color: grey;
         }
-       .upload-container {
-      text-align: center;
-      padding: 10px;
-    }
 
         .screen.init {
             top: 50%;
@@ -142,7 +138,7 @@
       background-color: #c0c0c0;
     }
         /* Input container for the first screen */
-        .input-container {
+        .input-container, .upload-container {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -297,7 +293,7 @@
             <div class="round"></div>
         </div>
         <div class="input-container" id ="ic">
-            <textarea id ="UserInput"placeholder="Type or Past the prompt here..."></textarea>
+            <textarea id ="UserInput"placeholder="Type or Past the prompt here..."></textarea> 
             <button type="button" aria-label="Submit text" onclick="redirectTo('https://copilot.microsoft.com/')">COPY TEXT & FIND AI SOLUTION </button>
         </div>
   <chatbot-body id="bots_list" style="display:none;">
@@ -320,8 +316,8 @@
             <div class="round"></div>
         </div>
         <div class="upload-container" style="display:'none';">
-            <h3> Upload the AI generated solution here. Text will be converted to PDF format. This pdf will be automatically sent to developer and you can also download a copy. </h3>
-            <input id ="textformat" placeholder="PAST THE SOLUTION AI GENERATED SOLUTION">
+            <h3 style = "display:none;"> Upload the AI generated solution here. Text will be converted to PDF format. This pdf will be automatically sent to developer and you can also download a copy. </h3>
+            <input id ="textformat" placeholder="Upload the AI generated solution here. Text will be converted to PDF format. This pdf will be automatically sent to developer and you can also download a copy.">
             <button class="upload-button" onclick="uploadFile()">Upload & Download a copy</button>
         </div>
         <button id="clr-prmpt" onclick="clrprmt()">CLEAR</button>
