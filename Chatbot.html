@@ -1,149 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dark Theme Chatbot</title>
-
-</head>
-<body>
-  <div class="chat-container">
-    <div class="chatbox" id="chatbox"></div>
-    <div class="input-container">
-      <input type="text" id="userInput" placeholder="Type your message...">
-      <button id="sendBtn">Send</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday</title>
+    <!-- CSS -->
+  </head>
+  <body>
+    <div class="birthdayCard">
+      <div class="cardFront">
+        <h3 class="happy">HAPPY BIRTHDAY</h3>
+        <div class="balloons">
+          <div class="balloon-1"></div>
+          <div class="balloon-2"></div>
+          <div class="balloon-3"></div>
+          <div class="balloon-4"></div>
+        </div>
+      </div>
+      <div class="cardInside">
+        <h3 class="back">HAPPY BIRTHDAY</h3>
+        <p>Dear Friend,</p>
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
+          expedita debitis esse quaerat adipisci iste illum placeat incidunt
+          reprehenderit laudantium!
+        </p>
+        <p class="name">xxx</p>
+      </div>
     </div>
-  </div>
-</body>
-</html>
+  </body>
 <style>
-/* Dark theme styling */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background-color: #1e1e1e;
-  color: #ffffff;
-}
-
-.chat-container {
+ body {
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   height: 100vh;
-  width: 100vw;
-  background-color: #333;
+  background-color: #239ac2;
 }
 
-.chatbox {
-  flex-grow: 1;
-  padding: 10px;
-  overflow-y: auto;
-  background-color: #2d2d2d;
-  border-bottom: 2px solid #444;
-}
-
-.input-container {
-  display: flex;
-  padding: 10px;
-  background-color: #1f1f1f;
-}
-
-input {
-  flex-grow: 1;
-  padding: 10px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  background-color: #444;
-  color: #fff;
-}
-
-input::placeholder {
-  color: #bbb;
-}
-
-button {
-  padding: 10px;
-  margin-left: 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #007bff;
-  color: #fff;
+.birthdayCard {
+  position: relative;
+  width: 250px;
+  height: 350px;
   cursor: pointer;
+  transform-style: preserve-3d;
+  transform: perspective(2500px);
+  transition: 1s;
 }
 
-button:hover {
-  background-color: #0056b3;
+.birthdayCard:hover {
+  transform: perspective(2500px) rotate(5deg);
+  box-shadow: inset 100px 20px 100px rgba(0, 0, 0, 0.2),
+    0 10px 100px rgba(0, 0, 0, 0.5);
 }
 
-/* Message styles */
-.message {
-  padding: 8px 10px;
-  margin: 5px 0;
-  border-radius: 10px;
-  max-width: 70%;
-  word-wrap: break-word;
+.birthdayCard:hover .cardFront {
+  transform: rotateY(-160deg);
 }
 
-.message.user {
-  align-self: flex-end;
-  background-color: #007bff;
+.birthdayCard:hover .happy {
+  visibility: hidden;
 }
 
-.message.bot {
-  align-self: flex-start;
-  background-color: #444;
+.cardFront {
+  position: relative;
+  background-color: #fff;
+  width: 250px;
+  height: 350px;
+  overflow: hidden;
+  transform-origin: left;
+  box-shadow: inset 100px 20px 100px rgba(0, 0, 0, 0.2),
+    30px 0 50px rgba(0, 0, 0, 0.4);
+  transition: 0.6s;
+}
+
+.happy {
+  font-family: Tahoma, sans-serif;
+  text-align: center;
+  margin: 30px;
+  background-image: linear-gradient(120deg, #ffd856 0%, #f98c6e 100%);
+  transition: 0.1s;
+}
+
+.balloons {
+  position: absolute;
+}
+
+.balloon-1,
+.balloon-2,
+.balloon-3,
+.balloon-4 {
+  position: absolute;
+  width: 85px;
+  height: 95px;
+  border-radius: 50%;
+}
+
+.balloon-1 {
+  background-color: rgba(255, 40, 90, 0.7);
+  left: -10px;
+  top: 50px;
+}
+
+.balloon-2 {
+  background-color: rgba(9, 215, 160, 0.7);
+  left: 50px;
+  top: 20px;
+}
+
+.balloon-3 {
+  background-color: rgba(255, 186, 26, 0.7);
+  left: 110px;
+  top: 50px;
+}
+
+.balloon-4 {
+  background-color: rgba(12, 122, 159, 0.7);
+  left: 170px;
+  top: 50px;
+}
+
+.balloon-1::before,
+.balloon-2::before,
+.balloon-3::before,
+.balloon-4::before {
+  content: "";
+  position: absolute;
+  width: 1px;
+  height: 155px;
+  background-color: #ffc848;
+  top: 95px;
+  left: 43px;
+}
+
+.balloon-1::after,
+.balloon-2::after,
+.balloon-3::after,
+.balloon-4::after {
+  content: "";
+  position: absolute;
+  border-right: 7px solid transparent;
+  border-left: 7px solid transparent;
+  top: 94px;
+  left: 37px;
+}
+
+.balloon-1::after {
+  border-bottom: 10px solid #ff3e6b;
+}
+
+.balloon-2::after {
+  border-bottom: 10px solid #04b183;
+}
+
+.balloon-3::after {
+  border-bottom: 10px solid #ffc94c;
+}
+
+.balloon-4::after {
+  border-bottom: 10px solid #13a9bd;
+}
+
+.cardInside {
+  position: absolute;
+  background-color: #fff;
+  width: 250px;
+  height: 350px;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  box-shadow: inset 100px 20px 100px rgba(0, 0, 0, 0.2);
+}
+
+p {
+  font-family: "Brush Script MT", cursive;
+  margin: 40px;
+  color: #333;
+}
+
+.name {
+  position: absolute;
+  left: 150px;
+  top: 200px;
+  color: #333;
+}
+
+.back {
+  font-family: Tahoma, sans-serif;
+  color: #333;
+  text-align: center;
+  margin: 30px;
+  outline-color: #333;
+  outline-style: dotted;
 }
 </style>
-
-<script>
-document.getElementById('sendBtn').addEventListener('click', async () => {
-  const userInput = document.getElementById('userInput').value;
-  if (userInput.trim() === '') return;
-
-  // Display user's message in chatbox
-  displayMessage(userInput, 'user');
-  
-  // Fetch bot response
-  const response = await getBotResponse(userInput);
-  displayMessage(response, 'bot');
-  
-  // Clear input field
-  document.getElementById('userInput').value = '';
-});
-
-function displayMessage(message, role) {
-  const chatbox = document.getElementById('chatbox');
-  const messageElement = document.createElement('div');
-  messageElement.classList.add('message', role);
-  messageElement.textContent = message;
-  chatbox.appendChild(messageElement);
-  chatbox.scrollTop = chatbox.scrollHeight;
-}
-
-async function getBotResponse(userInput) {
-  const url = 'https://open-ai21.p.rapidapi.com/claude3';
-  const options = {
-    method: 'POST',
-    headers: {
-      'x-rapidapi-key': 'cd5398045fmsh097aa728517c5e2p142dfbjsn56474f130c02',
-      'x-rapidapi-host': 'open-ai21.p.rapidapi.com',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      messages: [{ role: 'user', content: userInput }],
-      web_access: false
-    })
-  };
-
-  try {
-    const response = await fetch(url, options);
-    const result = await response.json();
-    return result.choices[0].message.content; // Assuming API response structure
-  } catch (error) {
-    console.error(error);
-    return 'Sorry, something went wrong.';
-  }
-}
-</script>
+</html>
