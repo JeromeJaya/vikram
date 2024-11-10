@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memory Blocks with Project Navigation</title>
     <style>
-        #thirdScreenBody {
+        /* Style section remains unchanged */
+        
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             display: flex;
@@ -15,7 +17,6 @@
             justify-content: center;
             height: 100vh;
         }
-        /* Top navigation bar */
         
         .top-nav {
             display: flex;
@@ -26,14 +27,12 @@
             width: 100%;
             justify-content: center;
         }
-        /* Folder icon style */
         
         .folder-icon {
             width: 40px;
             height: 40px;
             cursor: pointer;
         }
-        /* Search bars */
         
         .search-bar {
             width: 250px;
@@ -43,19 +42,29 @@
             font-size: 16px;
             outline: none;
         }
-        /* Cancel button */
         
-        .cancel-button {
+        .action-button {
             display: none;
             padding: 8px 16px;
             font-size: 16px;
-            background-color: #d9534f;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
-        /* Main container for memory blocks */
+        
+        .cancel-button {
+            background-color: #d9534f;
+        }
+        
+        .assign-button {
+            background-color: #5cb85c;
+            margin-right: 10px;
+        }
+        
+        .show-file-button {
+            background-color: #5bc0de;
+        }
         
         .container {
             display: flex;
@@ -63,7 +72,6 @@
             gap: 20px;
             margin-top: 20px;
         }
-        /* Memory blocks */
         
         .block {
             width: 200px;
@@ -81,7 +89,6 @@
         .raw-memory {
             background-color: #999;
         }
-        /* Code memory with sections */
         
         .code-memory {
             display: flex;
@@ -118,29 +125,38 @@
     </style>
 </head>
 
-<body id="thirdScreenBody">
+<body>
 
     <!-- Top navigation bar -->
     <div class="top-nav">
         <!-- Folder icon for file upload -->
         <label>
-            <img src="https://img.icons8.com/material-rounded/24/000000/folder-invoices.png" alt="Folder Icon" class="folder-icon" onclick="document.getElementById('file-input').click();">
+            <img src="https://img.icons8.com/material-rounded/24/000000/folder-invoices.png" alt="Folder Icon" class="folder-icon" onclick="document.getElementById('file-input');">
             <input type="file" id="file-input" accept="application/pdf, text/plain" style="display: none;" onchange="handleFileUpload(event)">
         </label>
 
-        <!-- Project search bar -->
-        <input type="text" id="project-search" class="search-bar" placeholder="Search project..." onfocus="searchProject()">
+        <!-- Project type dropdown -->
+        <select id="project-type" class="search-bar" onchange="selectProjectType()">
+            <option value="" disabled selected>Select Project Type...</option>
+            <option value="new">New Project</option>
+            <option value="existing">Existing Project</option>
+        </select>
 
-        <!-- Dropdown for team selection -->
-        <select id="team-select" class="search-bar" style="display: none;">
+        <!-- Project search bar -->
+        <input type="text" id="project-search" class="search-bar" placeholder="Enter project code..." style="display: none;">
+
+        <!-- Team selection dropdown -->
+        <select id="team-select" class="search-bar" style="display: none;" onchange="enableManagerPrompt()">
             <option value="" disabled selected>Select a team...</option>
             <option value="prompting">Prompting Team</option>
             <option value="developing">Developing Team</option>
             <option value="testing">Testing Team</option>
         </select>
 
-        <!-- Cancel button -->
-        <button id="cancel-button" class="cancel-button" onclick="cancelSearch()">Cancel</button>
+        <!-- Assign, Cancel, and Show File Content buttons -->
+        <button id="assign-button" class="action-button assign-button" onclick="showTeamSelection()">Assign</button>
+        <button id="show-file-button" class="action-button show-file-button" onclick="displayFileContent()">Open File Content</button>
+        <button id="cancel-button" class="action-button cancel-button" onclick="cancelSearch()">Cancel</button>
     </div>
 
     <!-- Memory blocks container -->
@@ -158,35 +174,40 @@
     </div>
 
     <script>
-        // Function to handle file upload and copy file content to the search bar
+        let fileContent = ""; // Store the file content
+
+        // Function to handle file upload and update the file status
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.getElementById('project-search').value = e.target.result;
+                    fileContent = e.target.result; // Store the file content
+                    document.getElementById('show-file-button').style.display = "inline-block"; // Show the "Open File Content" button
+                    document.getElementById('project-search').value = "File ready to open"; // Update search bar
                 };
                 reader.readAsText(file);
+
+                // Disable file input to prevent it from being triggered again
+                document.getElementById('file-input').disabled = true;
+
+                // Optionally, re-enable the input after some time or after another action
+                // document.getElementById('file-input').disabled = false;
             }
         }
 
-        // Function to prompt the user to choose project type on search
-        function searchProject() {
-            const cancelButton = document.getElementById('cancel-button');
-            cancelButton.style.display = 'inline-block';
+        // Function to display file content in the search bar
+        function displayFileContent() {
+            document.getElementById('project-search').value = fileContent;
+        }
 
-            const projectType = prompt("Is this a New Project or Existing Project? (Type 'new' or 'existing')");
-            if (projectType) {
-                if (projectType.toLowerCase() === 'new') {
-                    newProject();
-                } else if (projectType.toLowerCase() === 'existing') {
-                    existingProject();
-                } else {
-                    alert("Please enter either 'new' or 'existing'.");
-                    cancelSearch(); // Call cancelSearch if input is invalid
-                }
-            } else {
-                cancelSearch(); // Cancel search if no input provided
+        // Function to handle project type selection
+        function selectProjectType() {
+            const projectType = document.getElementById('project-type').value;
+            if (projectType === 'new') {
+                newProject();
+            } else if (projectType === 'existing') {
+                existingProject();
             }
         }
 
@@ -195,31 +216,52 @@
             const projectCode = prompt("Enter project code for the new project:");
             if (projectCode) {
                 document.getElementById('project-search').value = projectCode;
-                showTeamOptions();
+                document.getElementById('assign-button').style.display = "inline-block"; // Show Assign button
             }
         }
 
         // Existing project function
         function existingProject() {
-            showTeamOptions();
+            document.getElementById('project-search').style.display = "inline-block"; // Show the search bar only for entering project code
+            document.getElementById('assign-button').style.display = "none"; // Hide the assign button initially
         }
 
-        // Display team options in the second search box as a dropdown
-        function showTeamOptions() {
-            const teamSelect = document.getElementById('team-select');
-            teamSelect.style.display = "inline-block";
-            teamSelect.focus();
+        // Show the team selection dropdown when Assign button is clicked
+        function showTeamSelection() {
+            document.getElementById('team-select').style.display = "inline-block"; // Display team select dropdown
+            document.getElementById('cancel-button').style.display = "inline-block"; // Show Cancel button
+        }
+
+        // Enable manager prompt after selecting a team
+        function enableManagerPrompt() {
+            if (document.getElementById('team-select').value) {
+                assignWork(); // Call assignWork when team is selected
+            }
+        }
+
+        // Assign work function
+        function assignWork() {
+            const managerCode = prompt("Please enter the manager code:");
+            if (managerCode) {
+                alert("Work assigned successfully to " + document.getElementById('team-select').value + " team.");
+                cancelSearch();
+            } else {
+                alert("Manager code is required to assign work.");
+            }
         }
 
         // Cancel search function
         function cancelSearch() {
-            const cancelButton = document.getElementById('cancel-button');
-            const teamSelect = document.getElementById('team-select');
-            const projectSearch = document.getElementById('project-search');
-
-            projectSearch.value = ""; // Clear the search box
-            teamSelect.style.display = "none"; // Hide team dropdown
-            cancelButton.style.display = "none"; // Hide cancel button
+            document.getElementById('project-search').value = "";
+            document.getElementById('project-search').style.display = "none";
+            document.getElementById('team-select').style.display = "none";
+            document.getElementById('assign-button').style.display = "none";
+            document.getElementById('cancel-button').style.display = "none";
+            document.getElementById('show-file-button').style.display = "none";
+            document.getElementById('project-type').selectedIndex = 0;
+            fileContent = ""; // Clear file content
+            // Re-enable the file input after cancel or when needed
+            document.getElementById('file-input').disabled = false;
         }
     </script>
 
