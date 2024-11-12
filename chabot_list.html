@@ -642,6 +642,99 @@
 
       pdf.save("download.pdf"); // Saves the PDF with the name "download.pdf"
     }
+// third screen java script starts here
+        
+        let fileContent = ""; // Store the file content
+
+        // Function to handle file upload and update the file status
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    fileContent = e.target.result; // Store the file content
+                    document.getElementById('third-show-file-button').style.display = "inline-block"; // Show the "Open File Content" button
+                    document.getElementById('third-project-search').value = "File ready to open"; // Update search bar
+                };
+                reader.readAsText(file);
+
+                // Disable file input to prevent it from being triggered again
+                document.getElementById('third-file-input').disabled = true;
+
+                // Optionally, re-enable the input after some time or after another action
+                // document.getElementById('third-file-input').disabled = false;
+            }
+        }
+
+        // Function to display file content in the search bar
+        function displayFileContent() {
+            document.getElementById('third-project-search').value = fileContent;
+        }
+
+        // Function to handle project type selection
+        function selectProjectType() {
+            const projectType = document.getElementById('third-project-type').value;
+            if (projectType === 'new') {
+                newProject();
+            } else if (projectType === 'existing') {
+                existingProject();
+            }
+        }
+
+        // New project function
+        function newProject() {
+            const projectCode = prompt("Enter project code for the new project:");
+            if (projectCode) {
+                document.getElementById('third-project-search').value = projectCode;
+                document.getElementById('third-assign-button').style.display = "inline-block"; // Show Assign button
+            }
+        }
+
+        // Existing project function
+        function existingProject() {
+            document.getElementById('third-project-search').style.display = "inline-block"; // Show the search bar only for entering project code
+            document.getElementById('third-assign-button').style.display = "none"; // Hide the assign button initially
+        }
+
+        // Show the team selection dropdown when Assign button is clicked
+        function showTeamSelection() {
+            document.getElementById('third-team-select').style.display = "inline-block"; // Display team select dropdown
+            document.getElementById('third-cancel-button').style.display = "inline-block"; // Show Cancel button
+        }
+
+        // Enable manager prompt after selecting a team
+        function enableManagerPrompt() {
+            if (document.getElementById('third-team-select').value) {
+                assignWork(); // Call assignWork when team is selected
+            }
+        }
+
+        // Assign work function
+        function assignWork() {
+            const managerCode = prompt("Please enter the manager code:");
+            if (managerCode) {
+                alert("Work assigned successfully to " + document.getElementById('third-team-select').value + " team.");
+                cancelSearch();
+            } else {
+                alert("Manager code is required to assign work.");
+            }
+        }
+
+        // Cancel search function
+        function cancelSearch() {
+            document.getElementById('third-project-search').value = "";
+            document.getElementById('third-project-search').style.display = "none";
+            document.getElementById('third-team-select').style.display = "none";
+            document.getElementById('third-assign-button').style.display = "none";
+            document.getElementById('third-cancel-button').style.display = "none";
+            document.getElementById('third-show-file-button').style.display = "none";
+            document.getElementById('third-project-type').selectedIndex = 0;
+            fileContent = ""; // Clear file content
+            // Re-enable the file input after cancel or when needed
+            document.getElementById('third-file-input').disabled = false;
+        }
+// third screen java script ends here
+        
     </script>
 </body>
 </html>
