@@ -43,7 +43,116 @@
             background-color: white;
             border-color: grey;
         }
-
+        third-body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            flex-direction: column;
+        }
+        .third-top-nav {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .third-folder-icon {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        .third-search-bar {
+            width: 250px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .third-action-button {
+            display: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .third-cancel-button {
+            background-color: #d9534f;
+        }
+        
+        .third-assign-button {
+            background-color: #5cb85c;
+            margin-right: 10px;
+        }
+        
+        .third-show-file-button {
+            background-color: #5bc0de;
+        }
+        
+        .third-container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .third-block {
+            width: 200px;
+            height: 300px;
+            border: 2px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .third-raw-memory {
+            background-color: #999;
+        }
+        
+        .third-code-memory {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .third-memory-section {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .third-yellow {
+            background-color: yellow;
+            color: black;
+        }
+        
+        .third-red {
+            background-color: red;
+        }
+        
+        .third-green {
+            background-color: green;
+        }
+        
+        .third-gray {
+            background-color: gray;
+        }
+        
         .screen.init {
             top: 50%;
             left: 50%;
@@ -299,7 +408,53 @@
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
         </div>
-        
+        <third-body>
+
+    <!-- Top navigation bar -->
+    <div class="third-top-nav">
+        <!-- Folder icon for file upload -->
+        <label>
+            <img src="https://img.icons8.com/material-rounded/24/000000/folder-invoices.png" alt="Folder Icon" class="third-folder-icon" onclick="document.getElementById('third-file-input');">
+            <input type="file" id="third-file-input" accept="application/pdf, text/plain" style="display: none;" onchange="handleFileUpload(event)">
+        </label>
+
+        <!-- Project type dropdown -->
+        <select id="third-project-type" class="third-search-bar" onchange="selectProjectType()">
+            <option value="" disabled selected>Select Project Type...</option>
+            <option value="new">New Project</option>
+            <option value="existing">Existing Project</option>
+        </select>
+
+        <!-- Project search bar -->
+        <input type="text" id="third-project-search" class="third-search-bar" placeholder="Enter project code..." style="display: none;">
+
+        <!-- Team selection dropdown -->
+        <select id="team-select" class="search-bar" style="display: none;" onchange="enableManagerPrompt()">
+            <option value="" disabled selected>Select a team...</option>
+            <option value="prompting">Prompting Team</option>
+            <option value="developing">Developing Team</option>
+            <option value="testing">Testing Team</option>
+        </select>
+
+        <!-- Assign, Cancel, and Show File Content buttons -->
+        <button id="third-assign-button" class="third-action-button assign-button" onclick="showTeamSelection()">Assign</button>
+        <button id="third-show-file-button" class="third-action-button show-file-button" onclick="displayFileContent()">Open File Content</button>
+        <button id="third-cancel-button" class="third-action-button cancel-button" onclick="cancelSearch()">Cancel</button>
+    </div>
+
+    <!-- Memory blocks container -->
+    <div class="third-container">
+        <!-- Raw memory block -->
+        <div class="third-block third-raw-memory">Raw Memory</div>
+
+        <!-- Code memory block with sections -->
+        <div class="third-block third-code-memory">
+            <div class="third-memory-section third-yellow">Code Shared to Development Team</div>
+            <div class="third-memory-section third-red">Tested Code with Bugs</div>
+            <div class="third-memory-section third-green">Code Clear, No Bugs</div>
+            <div class="third-memory-section third-gray">Raw Code</div>
+        </div>
+    </div>
     </div>
 
     <!-- Bottom right screen -->
