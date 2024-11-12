@@ -212,55 +212,6 @@
     .upload-button:hover {
       background-color: #45a049;
     }
-        /* Memory block styles */
-        .memory-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
-        }
-
-        .blocks-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .block {
-            width: 200px;
-            height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid black;
-        }
-
-        .raw-memory {
-            background-color: gray;
-        }
-
-        .code-memory {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .memory-section {
-            height: 75px;
-            width: 100%;
-            border: 1px solid black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .yellow { background-color: yellow; color: black; }
-        .red { background-color: red; }
-        .green { background-color: green; }
-        .gray { background-color: gray; }
-
-
-
         /* Updated Clear button style */
         #clr-prmpt {
             display: none;
@@ -348,19 +299,7 @@
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
         </div>
-        <div class="memory-container">
-            <div class="blocks-container">
-                <div class="block raw-memory">
-                    <p>Raw Memory</p>
-                </div>
-                <div class="block code-memory">
-                    <div class="memory-section yellow">Code Shared to Development Team</div>
-                    <div class="memory-section red">Tested Code with Bugs</div>
-                    <div class="memory-section green">Code Clear, No Bugs</div>
-                    <div class="memory-section gray">Raw Code</div>
-                </div>
-            </div>
-        </div>
+        
     </div>
 
     <!-- Bottom right screen -->
