@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <title>Four Screen</title>
-    <style>
+       <style>
         * {
             margin: 0;
             padding: 0;
@@ -97,7 +98,45 @@
         .on .round {
             background-color: green;
         }
+    chatbot-body {
+      height: 90%;
+      width:100%;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+.chatbot-container-cover{
+      overflow-y: auto;
+      width: 90%;
+}
+    .chatbot-container {
+      display: flex;
+      overflow-y: auto;
+      flex-direction: column;
+      gap: 10px; /* Space between buttons */
+    }
 
+    .chatbot-btn {
+      padding: 10px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px; /* Curved edges */
+      color: #333; /* Dark gray text color */
+      background-color: #e0e0e0; /* Light gray background */
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+
+    /* Hover effect */
+    .chatbot-btn:hover {
+      background-color: #d0d0d0;
+      transform: scale(1.02); /* Slightly larger on hover */
+    }
+
+    .chatbot-btn:active {
+      background-color: #c0c0c0;
+    }
         /* Input container for the first screen */
         .input-container {
             display: flex;
@@ -106,24 +145,44 @@
             align-items: center;
             padding: 10px;
             width: 90%;
+            height:100%;
         }
+        .upload-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            width: 100%;
+            height:100%;
+        }
+        
 
-        textarea {
+        #UserInput {
             width: 90%;
-            height: 250px;
+            height: 80%;
             border-radius: 5px;
             border: 3px solid #ccc;
             padding: 10px;
             font-size: 1.2em;
             transition: all 1.5s ease;
         }
+         #textformat {
+            width: 100%;
+            height: 80%;
+            border-radius: 5px;
+            border: 3px solid #ccc;
+            padding: 10px;
+            font-size: 1.2em;
+            transition: all 1.5s ease;
+         }
 
         textarea:focus {
             border-color: #6a11cb;
             outline: none;
         }
 
-        button {
+        button, .upload-button {
             margin-top: 5px;
             padding: 10px;
             border: none;
@@ -138,54 +197,21 @@
         button:hover {
             background-color: #2575fc;
         }
-
-        /* Memory block styles */
-        .memory-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 50px;
+        .upload-button {
+            background-color: #2575fc;            
         }
-
-        .blocks-container {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .block {
-            width: 200px;
-            height: 300px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid black;
-        }
-
-        .raw-memory {
-            background-color: gray;
-        }
-
-        .code-memory {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .memory-section {
-            height: 75px;
-            width: 100%;
-            border: 1px solid black;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-
-        .yellow { background-color: yellow; color: black; }
-        .red { background-color: red; }
-        .green { background-color: green; }
-        .gray { background-color: gray; }
-
+    input[type="file"], #textformat {
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 50%;
+      border: solid 1px;
+      border-radius: 5px;
+    }
+    .upload-button:hover {
+      background-color: #45a049;
+    }
         /* Updated Clear button style */
         #clr-prmpt {
             display: none;
@@ -229,7 +255,277 @@
             width: 100px;
             height: 60px;
         }
-    </style>  
+    </style> 
+<style>
+//----------------------STYLE FOR THIRD SCREEN--------------------------
+
+#aditional-third{
+         left: 33%;
+         font-family: Arial, sans-serif;
+         flex-direction: column;
+        }
+        .top-nav-third {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f0f0f0;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .folder-icon-third {
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+        
+        .search-bar-third {
+            width: 250px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .button-container-third {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 280px;
+        }
+        
+        .action-button-third {
+            display: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .cancel-button-third {
+            background-color: #d9534f;
+        }
+        
+        .assign-button-third {
+            background-color: #5cb85c;
+        }
+        
+        .show-file-button-third {
+            background-color: #5bc0de;
+        }
+        
+        .container-third {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .block-third {
+            width: 200px;
+            height: 300px;
+            border: 2px solid black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            color: #333;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .raw-memory-third {
+            background-color: #999;
+        }
+        
+        .code-memory-third {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .memory-section-third {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .yellow-third {
+            background-color: yellow;
+            color: black;
+        }
+        
+        .red-third {
+            background-color: red;
+        }
+        
+        .green-third {
+            background-color: green;
+        }
+        
+        .gray-third {
+            background-color: gray;
+        }
+        
+        .hidden-third {
+            display: none;
+        }
+        
+        .modal-third {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+        
+        .modal-content-third {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
+        .modal-button-third {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .modal-close-third {
+            background-color: #f44336;
+        }
+</style> 
+//----------------------STYLE FOR FOURTH SCREEN--------------------------
+<style>
+        #aditional-fourth{
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            
+        }
+
+        .top-section {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .manager-search-bar select {
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: white;
+            appearance: none;
+            width: 200px;
+        }
+
+        .content-section {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            gap: 20px;
+        }
+
+        .left-section {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 70%;
+        }
+
+        .system-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .item-four {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .circle-four {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .red-four {
+            background-color: red;
+        }
+
+        .purple-four {
+            background-color: purple;
+        }
+
+        .yellow-four {
+            background-color: yellow;
+        }
+
+        .green-four {
+            background-color: green;
+        }
+
+        .lapImage {
+            width: 80px;
+            height: 70px;
+        }
+
+        .search-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search-bar-four {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .search-bar-four .selectOnFourthScreen{
+            padding: 5px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            background-color: white;
+            appearance: none;
+        }
+
+        .right-section {
+            width: 25%;
+            padding: 20px;
+            border-left: 2px solid #ccc;
+        }
+    </style>
 </head>
 <body>
     <!-- Top left screen with input -->
@@ -237,10 +533,22 @@
         <div class="on_off" onclick="toggleScreen('top_left')">
             <div class="round"></div>
         </div>
-        <div class="input-container">
-            <textarea placeholder="Enter your text here..."></textarea>
-            <button type="button" aria-label="Submit text" onclick="submitText()">Submit</button>
+        <div class="input-container" id ="ic">
+            <textarea id ="UserInput"placeholder="Type or Past the prompt here..."></textarea> 
+            <button type="button" aria-label="Submit text" onclick="redirectTo('https://copilot.microsoft.com/')">COPY TEXT & FIND AI SOLUTION </button>
         </div>
+  <chatbot-body id="bots_list" style="display:none;">
+  <div class="chatbot-containerchatbot-container-cover">
+    <div class="chatbot-container">
+     <button onclick="redirectTo('https://chat.openai.com')" class="chatbot-btn" id="bot-btn">ChatGPT</button>
+      <button onclick="redirectTo('https://www.google.com/gemini')" class="chatbot-btn id="bot-btn">Gemini</button>
+      <button onclick="redirectTo('https://claude.ai/new')" class="chatbot-btn" id="bot-btn">Claude</button>
+      <button onclick="redirectTo('https://copilot.microsoft.com/')" class="chatbot-btn" id="bot-btn">Copilot</button>
+      <button onclick="redirectTo('https://v0.dev/')" class="chatbot-btn" id="bot-btn">v0.dev</button>
+      <button class="chatbot-btn" id="modify prompt" onclick=modify() id="bot-btn">MODIFY THE PROMPT</button>
+    </div>
+  </div>
+</chatbot-body>
     </div>
 
     <!-- Top right screen -->
@@ -248,94 +556,180 @@
         <div class="on_off" onclick="toggleScreen('top_right')">
             <div class="round"></div>
         </div>
-        <div id="Alert" style="text-align: center; display: none;">
-            <h3>BACKEND CHATBOT NOT YET INTEGRATED</h3>
-            <h6>Text submitted on 1st screen will be displayed here</h6>
+        <div class="upload-container" style="display:'none';">
+            <h3 style = "display:none;"> Upload the AI generated solution here. Text will be converted to PDF format. This pdf will be automatically sent to developer and you can also download a copy. </h3>
+            <textarea id ="textformat" placeholder="Upload the AI generated solution here. Text will be converted to PDF format. This pdf will be automatically sent to developer and you can also download a copy."></textarea>
+            <button class="upload-button" onclick="uploadFile()">Upload & Download a copy</button>
         </div>
-        <div class="screen_text" id="prmt"></div>
         <button id="clr-prmpt" onclick="clrprmt()">CLEAR</button>
     </div>
 
     <!-- Bottom left screen with memory block -->
-    <div class="screen bottom_left init">
+<div class="screen bottom_left init" id ="aditional-third">
         <div class="on_off" onclick="toggleScreen('bottom_left')">
             <div class="round"></div>
+        </div> 
+        <div class="top-nav-third">
+        <label>
+            <img src="https://img.icons8.com/material-rounded/24/000000/folder-invoices.png" alt="Folder Icon" class="folder-icon-third" onclick="document.getElementById('file-input-third');">
+            <input type="file" id="file-input-third" accept="application/pdf, text/plain" style="display: none;" onchange="handleFileUpload(event)">
+        </label>
+
+<select id="project-type-third" class="search-bar-third" onchange="selectProjectType()">
+    <option value="" disabled selected>Select Project Type...</option>
+    <option value="new">New Project</option>
+    <option value="existing">Existing Project</option>
+</select>
+
+        <input type="text" id="project-search-third" class="search-bar-third" placeholder="Enter project code..." style="display: none;">
+        <input type="text" id="new-project-code-third" class="search-bar-third" placeholder="Enter project code" style="display: none;" onchange="updateProjectCode()">
+        <select id="team-select-third" class="search-bar-third" style="display: none;" onchange="enableManagerPrompt()">
+            <option value="" disabled selected>Select a team...</option>
+            <option value="prompting">Prompting Team</option>
+            <option value="developing">Developing Team</option>
+            <option value="testing">Testing Team</option>
+        </select>
+
+        <select id="id-select-third" class="search-bar-third" style="display: none;">
+            <option value="" disabled selected>Select a member...</option>
+        </select>
+
+        <div class="button-container-third">
+            <button id="cancel-button-third" class="action-button-third cancel-button-third" onclick="cancelSearch()">Cancel</button>
+            <button id="assign-button-third" class="action-button-third assign-button-third" onclick="assignTeamMember()">Assign</button>
         </div>
-        <div class="memory-container">
-            <div class="blocks-container">
-                <div class="block raw-memory">
-                    <p>Raw Memory</p>
-                </div>
-                <div class="block code-memory">
-                    <div class="memory-section yellow">Code Shared to Development Team</div>
-                    <div class="memory-section red">Tested Code with Bugs</div>
-                    <div class="memory-section green">Code Clear, No Bugs</div>
-                    <div class="memory-section gray">Raw Code</div>
-                </div>
-            </div>
+
+        <button id="show-file-button-third" class="action-button-third show-file-button-third" onclick="displayFileContent()">Open File Content</button>
+    </div>
+
+    <div id="memory-container-third" class="container-third">
+        <div id="raw-memory-block-third" class="block-third raw-memory-third">Raw Memory</div>
+
+        <div id="code-memory-third" class="block-third code-memory-third">
+            <div class="memory-section-third yellow-third" id="code-assignment-third">Code Assigned</div>
+            <div class="memory-section-third red-third">Tested Code with Bugs</div>
+            <div class="memory-section-third green-third">Code Clear, No Bugs</div>
+            <div class="memory-section-third gray-third">Raw Code</div>
         </div>
     </div>
 
+    <div id="modal-third" class="modal-third">
+        <div class="modal-content-third">
+            <p id="modal-message-third"></p>
+            <button class="modal-button-third modal-close-third" onclick="closeModal()">Close</button>
+        </div>      
+    </div>
+</div>
     <!-- Bottom right screen -->
-    <div class="screen bottom_right init">
+       <div class="screen bottom_right init aditional-fourth" style="overflow: hidden;">
         <div class="on_off" onclick="toggleScreen('bottom_right')">
             <div class="round"></div>
         </div>
-        <div class="body"> 
-            <div class="container">
-                <div class="row">
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot reddot"></div>
+            <!-- Manager Search Bar -->
+    <div class="top-section">
+        <div class="manager-search-bar">
+            <select class ="selectOnFourthScreen" aria-label="Select Manager Code">
+                <option value="" disabled selected>Select a Manager Code</option>
+                <option value="MGR001">MGR001</option>
+                <option value="MGR002">MGR002</option>
+                <option value="MGR003">MGR003</option>
+                <option value="MGR004">MGR004</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="content-section">
+        <!-- Systems Section -->
+        <div class="left-section">
+            <h2>Systems</h2>
+            <div class="system-group">
+                <!-- Red Systems -->
+                <div class="item-four">
+                    <div class="search-section">
+                        <img class = "lapImage"src="laptop.jpg" alt="Laptop Icon">
+                        <div class="circle-four red-four"></div>
+                        <span class="system-category">Red Systems</span>
                     </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot reddot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot reddot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot purpledot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot purpledot"></div>
+                    <div class="search-bar-four">
+                        <label for="red-systems">Select a System:</label>
+                        <select class ="selectOnFourthScreen" id="red-systems" aria-label="Select Red System">
+                            <option value="" disabled selected>Select a System</option>
+                            <option value="SYS101">SYS101</option>
+                            <option value="SYS102">SYS102</option>
+                            <option value="SYS103">SYS103</option>
+                        </select>
+                        <input type="checkbox" id="red-checkbox"> <label for="red-checkbox">Available</label>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot purpledot"></div>
+
+                <!-- Purple Systems -->
+                <div class="item-four">
+                    <div class="search-section">
+                        <img src="laptop.jpg" alt="Laptop Icon">
+                        <div class="circle-four purple-four"></div>
+                        <span class="system-category">Purple Systems</span>
                     </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot yellowdot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot yellowdot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot yellowdot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot greendot"></div>
+                    <div class="search-bar-four">
+                        <label for="purple-systems">Select a System:</label>
+                        <select class ="selectOnFourthScreen" id="purple-systems" aria-label="Select Purple System">
+                            <option value="" disabled selected>Select a System</option>
+                            <option value="SYS201">SYS201</option>
+                            <option value="SYS202">SYS202</option>
+                            <option value="SYS203">SYS203</option>
+                        </select>
+                        <input type="checkbox" id="purple-checkbox"> <label for="purple-checkbox">Available</label>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot greendot"></div>
+
+                <!-- Yellow Systems -->
+                <div class="item-four">
+                    <div class="search-section">
+                        <img src="laptop.jpg" alt="Laptop Icon">
+                        <div class="circle-four yellow-four"></div>
+                        <span class="system-category">Yellow Systems</span>
                     </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot greendot"></div>
+                    <div class="search-bar-four">
+                        <label for="yellow-systems">Select a System:</label>
+                        <select class ="selectOnFourthScreen" id="yellow-systems" aria-label="Select Yellow System">
+                            <option value="" disabled selected>Select a System</option>
+                            <option value="SYS301">SYS301</option>
+                            <option value="SYS302">SYS302</option>
+                            <option value="SYS303">SYS303</option>
+                        </select>
+                        <input type="checkbox" id="yellow-checkbox"> <label for="yellow-checkbox">Available</label>
                     </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot greendot"></div>
+                </div>
+
+                <!-- Green Systems -->
+                <div class="item-four">
+                    <div class="search-section">
+                        <img src="laptop.jpg" alt="Laptop Icon">
+                        <div class="circle-four green-four"></div>
+                        <span class="system-category">Green Systems</span>
                     </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot greendot"></div>
-                    </div>
-                    <div class="item"><img src="screen.jpg" alt="System">
-                        <div class="dot greendot"></div>
+                    <div class="search-bar-four">
+                        <label for="green-systems">Select a System:</label>
+                        <select class ="selectOnFourthScreen" id="green-systems" aria-label="Select Green System">
+                            <option value="" disabled selected>Select a System</option>
+                            <option value="SYS401">SYS401</option>
+                            <option value="SYS402">SYS402</option>
+                            <option value="SYS403">SYS403</option>
+                        </select>
+                        <input type="checkbox" id="green-checkbox"> <label for="green-checkbox">Available</label>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Work Status Section -->
+        <div class="right-section">
+            <h3>Work Status</h3>
+            <p>System SYS101: Free</p>
+            <p>System SYS202: Assigned</p>
+            <p>System SYS303: Nearing Completion</p>
+            <p>System SYS404: Completed</p>
+        </div>
+    </div>
     </div>
 
     <script>
@@ -355,6 +749,8 @@
         function toggleScreen(screenClass) {
             const screen = document.querySelector(`.${screenClass}`);
             const isFullScreen = screen.classList.contains('fullscreen');
+            const botbtn = document.getElementById('bot-btn');
+              botbtn.style.padding = "15px"; 
 
             if (isFullScreen) {
                 screen.classList.remove('fullscreen');
@@ -369,55 +765,35 @@
 
         // Submit text from the textarea to the chatbot API
         async function submitText() {
-            const textarea = document.querySelector('textarea');
-            const userPrompt = textarea.value.trim();
+      // Get the input field and select its content
+      const inputField = document.getElementById("UserInput");
+      
+      inputField.select();
+      inputField.setSelectionRange(0, 99999); // For mobile devices
 
-            if (!userPrompt) {
-                alert('Please enter a prompt!');
-                return;
-            }
-
-            // API options and request configuration
-            const url = 'https://cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com/v1/chat/completions';
-            const options = {
-                method: 'POST',
-                headers: {
-                    'x-rapidapi-key': 'YOUR_API_KEY_HERE', // Use a secure method to manage API keys
-                    'x-rapidapi-host': 'cheapest-gpt-4-turbo-gpt-4-vision-chatgpt-openai-ai-api.p.rapidapi.com',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    messages: [
-                        {
-                            role: 'user',
-                            content: userPrompt
-                        }
-                    ],
-                    model: 'gpt-4o',
-                    max_tokens: 600,
-                    temperature: 0.9
-                })
-            };
-
-            try {
-                // Fetch chatbot response
-                const response = await fetch(url, options);
-                const result = await response.json();
-
-                // Display the chatbot response on the top right screen
-                const screen2 = document.getElementById('prmt');
-                screen2.innerText = result.choices[0].message.content;
-                screen2.style.display = 'block';
-
-                // Show clear button
-                document.getElementById('clr-prmpt').style.display = 'block';
-
-            } catch (error) {
-                console.error(error);
-                alert('Rate limit is over, ask Jerome to update the API key.');
-            }
-        }
-
+      // Copy the text to the clipboard
+      const text = inputField.value;
+      /**const start = "'";
+      const end = "' generate the out put in a pdf formate in download able formate.";
+      const txt = start + text + end;**/
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert("Text you entered copied to clipboard! Now choose a chatbot to redirect to the respective official chatbot & generate the AI solution. Once the ai solution is ready, come back here and upload the solution in the top right screen.");
+        })
+        .catch(err => {
+          console.error("Failed to copy text: ", err);
+        });
+       //displaying the chatbots
+          const bots = document.getElementById('bots_list');
+          const data = document.getElementById('ic');
+                    }
+        function modify(){
+           
+          const bots = document.getElementById('bots_list');
+          bots.style.display="none";
+          const data = document.getElementById('ic');
+          data.style.display="flex";
+           }
         // Clear the response on the top-right screen
         function clrprmt() {
             const screen2 = document.getElementById('prmt');
@@ -428,6 +804,167 @@
             // Clear the textarea
             document.querySelector('textarea').value = '';
         }
+
+    function redirectTo(url) {
+      window.location.href = url;
+        const inputField = document.getElementById("UserInput");
+      
+      inputField.select();
+      inputField.setSelectionRange(0, 99999); // For mobile devices
+
+      // Copy the text to the clipboard
+      const text = inputField.value;
+      /**const start = "'";
+      const end = "' generate the out put in a pdf formate in download able formate.";
+      const txt = start + text + end;**/
+      navigator.clipboard.writeText(text)
+        .then(() => {
+          alert("Text you entered copied to clipboard! Now choose a chatbot to redirect to the respective official chatbot & generate the AI solution. Once the ai solution is ready, come back here and upload the solution in the top right screen.");
+        })
+        .catch(err => {
+          console.error("Failed to copy text: ", err);
+        });
+    }
+    function uploadFile() {
+      const { jsPDF } = window.jspdf; // Load jsPDF
+      const pdf = new jsPDF();
+      const text = document.getElementById("textformat").value;
+
+// Define the maximum width and height for the text on each page
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+  const margin = 10; // Set margins for better readability
+  const maxWidth = pageWidth - margin * 2;
+  const lineHeight = 10; // Height for each line of text
+
+      // Split text into lines that fit within the max width
+  const lines = pdf.splitTextToSize(text, maxWidth);
+  let yPosition = margin;
+
+  lines.forEach((line, index) => {
+    // Check if adding this line exceeds the page height
+    if (yPosition + lineHeight > pageHeight - margin) {
+      pdf.addPage(); // Add a new page
+      yPosition = margin; // Reset yPosition to start from the top
+    }
+
+    pdf.text(line, margin, yPosition);
+    yPosition += lineHeight; // Move down for the next line
+  });
+
+      pdf.save("download.pdf"); // Saves the PDF with the name "download.pdf"
+    }
     </script>
+<script>
+
+//----------------------SCRIPT FOR THIRD SCREEN--------------------------
+
+        let fileContentthird = "";
+        let teamDatathird = {
+            prompting: {
+                managerId: "PM-001",
+                developerIds: ["D-001", "D-002", "D-003", "D-010", "D-011"]
+            },
+            developing: {
+                managerId: "DM-001",
+                developerIds: ["D-004", "D-005", "D-006", "D-012", "D-013"]
+            },
+            testing: {
+                managerId: "TM-001",
+                developerIds: ["D-007", "D-008", "D-009", "D-014", "D-015"]
+            }
+        };
+
+        function handleFileUpload(event) {
+            const filethird = event.target.files[0];
+            if (filethird) {
+                const readerthird = new FileReader();
+                readerthird.onload = function(e) {
+                    fileContentthird = e.target.result;
+                    document.getElementById('show-file-button-third').style.display = "inline-block";
+                    document.getElementById('project-search-third').value = "File ready to open";
+                };
+                reader-third.readAsText(file-third);
+                document.getElementById('file-input-third').disabled = true;
+            }
+        }
+
+        function displayFileContent() {
+            document.getElementById('project-search-third').value = fileContentthird;
+        }
+
+        function selectProjectType() {
+            const projectTypethird = document.getElementById('project-type-third').value;
+            resetUI();
+            if (projectTypethird === "new") {
+                document.getElementById('new-project-code-third').style.display = "block";
+                document.getElementById('team-select-third').style.display = "block";
+                hideMemoryBlocks();
+            } else if (projectTypethird === "existing") {
+                document.getElementById('project-search-third').style.display = "block";
+                document.getElementById('assign-button-third').style.display = "block";
+                document.getElementById('cancel-button-third').style.display = "block";
+                showMemoryBlocks();
+            }
+        }
+
+        function hideMemoryBlocks() {
+            document.getElementById('raw-memory-block-third').style.display = "none";
+            document.getElementById('code-memory-third').style.display = "none";
+        }
+
+        function showMemoryBlocks() {
+            document.getElementById('raw-memory-block-third').style.display = "block";
+            document.getElementById('code-memory-third').style.display = "flex";
+        }
+
+        function resetUI() {
+            document.getElementById('project-search-third').style.display = "none";
+            document.getElementById('new-project-code-third').style.display = "none";
+            document.getElementById('team-select-third').style.display = "none";
+            document.getElementById('id-select-third').style.display = "none";
+            document.getElementById('assign-button-third').style.display = "none";
+            document.getElementById('cancel-button-third').style.display = "none";
+        }
+
+        function updateProjectCode() {
+            const newProjectCodethird = document.getElementById('new-project-code-third').value;
+            document.getElementById('project-search-third').value = newProjectCodethird;
+        }
+
+        function enableManagerPrompt() {
+            const teamType = document.getElementById('team-select-third').value;
+            const selectId = document.getElementById('id-select-third');
+            selectId.style.display = "block";
+            selectId.innerHTML = `<option value="${teamDatathird[teamType].managerId}">${teamDatathird[teamType].managerId}</option>`;
+            teamDatathird[teamType].developerIds.forEach(id => {
+                selectId.innerHTML += `<option value="${id}">${id}</option>`;
+            });
+            document.getElementById('assign-button-third').style.display = "block";
+            document.getElementById('cancel-button-third').style.display = "block";
+        }
+
+        function assignTeamMember() {
+            const selectedMemberId = document.getElementById('id-select-third').value;
+            document.getElementById('modal-message-third').innerText = `Successfully assigned ${selectedMemberId}`;
+            showModal();
+        }
+
+        function cancelSearch() {
+            document.getElementById('project-type-third').value = "";
+            resetUI();
+        }
+
+        function showModal() {
+            document.getElementById('modal-third').style.display = "block";
+        }
+
+        function closeModal() {
+            document.getElementById('modal-third').style.display = "none";
+        }
+
+</script>
+
+
 </body>
 </html>
